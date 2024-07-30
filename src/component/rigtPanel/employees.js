@@ -13,7 +13,7 @@ const Employees = ({ employees, Employeedata }) => {
     <aside>
       <div className="employee-list-container">
         {/* <div style={{ height: "350px", overflowY: "auto" }}> */}
-        <table className="table table-bordered table-striped">
+        <table className="table table-bordered tablestriped">
           <thead className="sticky-top">
             <tr style={{ fontSize: "11px" }}>
               <th style={{ width: "55%",fontSize: "11px" }}>Employee</th>

@@ -85,78 +85,44 @@ export default function BasicTabs({
                   value={value}
                   onChange={handleChange}
                   aria-label="basic tabs example"
-                  style={{background:'#09587c'}}
+                  style={{background:'#FFFFFF'}}
                 >
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c"}}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#FFFFFF"}}
                     label="Properties"
                     {...a11yProps(0)}
                   />
                    <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 1 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Organisation"
                     {...a11yProps(1)}
                   />
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 2 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Branch"
                     {...a11yProps(2)}
                   />
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 3 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 3 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Machine Type"
                     {...a11yProps(3)}
                   /> 
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 4 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 4 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Material Type"
                     {...a11yProps(4)}
                   /> 
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 5 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 5 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Material Category"
                     {...a11yProps(5)}
                   /> 
                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 6 ? "#fc9445" : "#09587c" }}
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 6 ? "#E6ECEF" : "#FFFFFF" }}
                     label="Machine Category"
                     {...a11yProps(6)}
                   /> 
-                  {/*<Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 3 ? "#fc9445" : "#09587c" }}
-                    label="Department"
-                    {...a11yProps(3)}
-                  />*/}
-                  {/* <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 5 ? "#fc9445" : "#09587c" }}
-                    label="Employee Category"
-                    {...a11yProps(5)}
-                  />
-                  <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 6 ? "#fc9445" : "#09587c" }}
-                    label="Material"
-                    {...a11yProps(6)}
-                  />
-                  <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 7 ? "#fc9445" : "#09587c" }}
-                    label="Material Category"
-                    {...a11yProps(7)}
-                  />
-                  <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 8 ? "#fc9445" : "#09587c" }}
-                    label="Material Type"
-                    {...a11yProps(8)}
-                  />
-                  <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 9 ? "#fc9445" : "#09587c" }}
-                    label="Units"
-                    {...a11yProps(9)}
-                  />
-                  <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#FFFFFF', backgroundColor: value === 10 ? "#fc9445" : "#09587c" }}
-                    label="Section"
-                    {...a11yProps(10)}
-                  /> */}
+                  
                 </Tabs>
               )}
             </Box>

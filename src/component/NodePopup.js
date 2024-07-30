@@ -4,12 +4,12 @@ import { FaXmark, FaCheck } from "react-icons/fa6";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { BASE_URL } from "../constants/apiConstants";
-import { getMachineTypeMaster, getMaterialTypeMaster, getNodeMaster } from "../api/shovelDetails";
-import Switch from '@mui/material/Switch';
-import { v4 as uuidv4 } from 'uuid';
-const labelSwitch = { inputProps: { 'aria-label': 'Switch demo' } };
+import { getNodeMaster } from "../api/shovelDetails";
+import Switch from "@mui/material/Switch";
+import { v4 as uuidv4 } from "uuid";
+const labelSwitch = { inputProps: { "aria-label": "Switch demo" } };
 
-const NodesPopup = ({ node, onClose, onSave,onClick }) => {
+const NodesPopup = ({ node, onClose, onSave, onClick }) => {
   const [data, setdata] = useState();
   const [nodeType, setNodeType] = useState(node?.nodeType);
   const [MachineType, setMachineType] = useState(node?.MachineType);
@@ -27,6 +27,7 @@ const NodesPopup = ({ node, onClose, onSave,onClick }) => {
   const [fontColor, setFontColor] = useState(node?.style.color);
   const [borderColor, setBorderColor] = useState(node?.style.borderColor);
   const [bgColor, setBgColor] = useState(node?.style.background);
+  const [PerRejects, setPerRejects] = useState(node?.percentage_rejects);
   const [fontStyle, setFontStyle] = useState(node?.style.fontStyle);
   const [borderWidth, setBorderWidth] = useState(node?.style.borderWidth);
   const [borderStyle, setBorderStyle] = useState(node?.style.borderStyle);
@@ -46,19 +47,19 @@ const NodesPopup = ({ node, onClose, onSave,onClick }) => {
     const responsedata = await getNodeMaster();
     setNodedata(responsedata, key);
   };
-  const showMaterialdata = async (key) => {
-    const responsedata = await getMaterialTypeMaster();
-    setMaterialdata(responsedata, key);
-  };
-  const showMachinedata = async (key) => {
-    const responsedata = await getMachineTypeMaster();
-    setMachinedata(responsedata, key);
-  };
+  // const showMaterialdata = async (key) => {
+  //   const responsedata = await getMaterialTypeMaster();
+  //   setMaterialdata(responsedata, key);
+  // };
+  // const showMachinedata = async (key) => {
+  //   const responsedata = await getMachineTypeMaster();
+  //   setMachinedata(responsedata, key);
+  // };
 
   useEffect(() => {
     showNodesdata();
-    showMachinedata();
-    showMaterialdata();
+    // showMachinedata();
+    // showMaterialdata();
   }, []);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const NodesPopup = ({ node, onClose, onSave,onClick }) => {
     setFileTODB(node?.nodeImage);
     settargetPosition(node?.targetPosition)
     setsourcePosition(node?.sourcePosition)
+    setPerRejects(node?.percentage_rejects)
   }, [node]);
 
   // Function to handle input changes
@@ -132,19 +134,24 @@ const NodesPopup = ({ node, onClose, onSave,onClick }) => {
       setHeight("80px"); // Set the default height for Material
       setborderRadius("50%");
       setBgColor("#35ca5c")
-      setFontColor("#FFFFFF")
+      setFontColor("#000000")
     } else if (event.target.value === "Machine") {
-      setWidth("180px");
-      setHeight("60px");
+      setWidth("300px");
+      if(file){
+        setHeight("220px");
+      }
+      else{
+        setHeight("80px");
+      }
       setborderRadius('10px');
-      const color = "#000000";
+      const color = "#CCCCCC";
       setBorderColor(color);
       setBorderWidth("1px");
       setMeasurable("No");
       setMandatory("No");
       setNodeCategory("");
-      setBgColor("#dcdcdc")
-      setFontColor("#09587C")
+      setBgColor("#EEEEEE")
+      setFontColor("#000000")
     }
   };
 
@@ -158,50 +165,53 @@ const NodesPopup = ({ node, onClose, onSave,onClick }) => {
       setWidth("80px");
       setHeight("80px");
       setborderRadius("50%");
-      const color = "#000000";
+      const color = "#CCCCCC";
       setBorderColor(color);
       setBorderWidth("2px");
       setImageStyle("")
       setBgColor("#F97C1E")
-      setFontColor("#FFFFFF")
+      setFontColor("#000000")
   } 
     else if (value === "Waste") {
         setWidth("80px");
         setHeight("80px");
         setborderRadius("50%");
-        const color = "#000000";
+        const color = "#CCCCCC";
         setBorderColor(color);
         setBorderWidth("2px");
         setImageStyle("")
         setBgColor("#03FC37")
-        setFontColor("#FFFFFF")
+        setFontColor("#000000")
     } 
     else if (nodeType === "Material" && value === "Finished Goods") {
-        const color = "#000";
+        const color = "#CCCCCC";
         setBorderColor(color);
         setWidth("80px");
         setHeight("80px");
         setborderRadius("50%");
+        setBgColor("#FCDEDF")
+        setFontColor("#000000")
         // setsourcePosition(""); // Moved inside this condition
         setImageStyle("output")
     } else if (nodeType === "Material" && value === "Raw Material") {
-        const color = "#000";
+        const color = "#CCCCCC";
         setBorderColor(color);
         setWidth("80px");
         setHeight("80px");
         setborderRadius("50%");
-        setBgColor("#1976D2")
+        setBgColor("#9CDBB9")
+        setFontColor("#000000")
         // settargetPosition(""); // Moved inside this condition
         // setsourcePosition("right")
         setImageStyle("input")
     } else if (nodeType === "Material" && value === "Work In Progress") {
-        const color = "#000"; // Consider adding specific color for this case
+        const color = "#CCCCCC"; // Consider adding specific color for this case
         setBorderColor(color);
         setWidth("80px");
         setHeight("80px");
         setborderRadius("50%");
         setImageStyle("")
-        setBgColor("#ebff00")
+        setBgColor("#9CDBB9")
         setFontColor("#000000")
     }
 };
@@ -237,6 +247,9 @@ const handleMachineType = (event) => {
   const handleBackGroud = (event) => {
     setBgColor(event.target.value);
   };
+  const handlePerRejects = (event) => {
+    setPerRejects(event.target.value);
+  };
   const handleBorderCOlor = (event) => {
     setBorderColor(event.target.value);
     console.log(borderColor);
@@ -256,7 +269,7 @@ const handleMachineType = (event) => {
     }
     else{
       setHeight("80px")
-      setWidth("180px")
+      setWidth("300px")
     }
   };
   console.log(PNode,"KKKK")
@@ -273,7 +286,7 @@ const handleMachineType = (event) => {
     const fd = new FormData();
     fd.append('file', fileTODB);
     console.log(fd,"save")
-    await axios.post('http://localhost:5000/upload-image', fd,
+    await axios.post('http://localhost:5001/upload-image', fd,
      {
         headers: {
             'Content-Type': 'multipart/form-data'
@@ -307,6 +320,7 @@ const handleMachineType = (event) => {
       targetPosition:targetPosition,
       data: { ...node.data, label: label },
       position: { x: xPosition, y: yPosition },
+      percentage_rejects:PerRejects,
       style: {
         fontSize: fontsize,
         width: width,
@@ -346,6 +360,7 @@ const handleMachineType = (event) => {
         sourcePosition: "right",
         targetPosition: "left",
         iconId: '',
+        percentage_rejects:0,
         style: {
           zIndex: 1001,
           // width: node.style.width,
@@ -403,445 +418,332 @@ const handleMachineType = (event) => {
       });
   }, []);
 
-  // const [imageSrc, setImageSrc] = useState(null);
-
-  // useEffect(() => {
-  //   // Define the image name you want to fetch
-  //   const imageName = 'masterbatch.jpg'; // Replace 'example.jpg' with the actual image name
-
-  //   // Fetch the image from your server
-  //   fetch(`/get-image/${imageName}`)
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Image not found');
-  //       }
-  //       return response.blob();
-  //     })
-  //     .then(blob => {
-  //       // Convert the blob into a URL
-  //       const imageUrl = URL.createObjectURL(blob);
-  //       setImageSrc(imageUrl);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching image:', error);
-  //     });
-
-  //   // Cleanup function to revoke the object URL when component unmounts
-  //   return () => {
-  //     if (imageSrc) {
-  //       URL.revokeObjectURL(imageSrc);
-  //     }
-  //   };
-  // }, [imageSrc]);
-  
-
-  // useEffect(() => {
-  //   console.log("1st")
-  //   const fetchImage = async () => {
-  //     console.log("2nd")
-  //     try {
-  //       console.log("3rd")
-  //       // const imageUrl = 'http://localhost:5000/uploaded-images/example.jpg'; // Replace with the actual URL to your uploaded image
-  //       const response = await axios.get('http://localhost:5000/api/shift/uploaded/1618366938-101006.png');
-  //       setImageUrl(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching image:', error);
-  //     }
-  //   };
-
-  //   fetchImage();
-  // }, []);
-
-
   return (
     <div
       className="edge-popup container-fluid"
       style={{
-        width: "1000px",
-        height: "235px",
-        // overflow:"scroll",
         position: "absolute",
-        // top: "48px",
-        // // right: "0px",
-        // cursor:"pointer",
-        // paddingLeft: "5px",
-        // paddingTop: "5px",
-        // // overflow:'hidden',
-        // display:'flex',
-        // backgroundColor: "white",
-        // border:'1px solid black',
-        // boxShadow: "2px 2px 10px 0.1px black"
       }}
     >
-      {/* <div 
-        onClick={onClose}
-        style={{backgroundColor:'red',
-                color:'whitesmoke',
-                width:'20px',
-                height:'20px',
-                textAlign:'center',
-                lineHeight:1,
-                position:'absolute',
-                right:'1px',
-                top:'1px'
-                }}>
-                <FaXmark />
-        </div> */}
-
-      <form action="" method="post" enctype="multipart/form-data">
-      <div className="row">
-
-        <div className="col-3 p-2">
-          <table style={{ fontSize: "11px" }}>
-            <tr>
-              <td>Node Id:</td>
-              <td>{node?.nodeId}</td>
-            </tr>
-            <tr>
-              <td>Node Type</td>
-              <td>
+      <form action="" method="post" enctype="multipart/form-data" style={{ fontSize: "11px" }}>
+        <div className="container-fluid">
+          <div className="row" style={{ fontSize: "11px" }}>
+            <div className="col-2 p-2">
+              <label>Node ID</label>
+              <input
+                type="text"
+                className="form-control"
+                value={node?.nodeId}
+                style={{ height: "32px" }}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Node Type</label>
+              <select
+                style={{ height: "32px" }}
+                className="form-control"
+                onChange={handleNodeTypeChange}
+                value={nodeType}
+              >
+                <option hidden>Node Type</option>
+                {data
+                  ? data.map((item) => (
+                      <option key={item.Type} value={item.Type}>
+                        {item.Type}
+                      </option>
+                    ))
+                  : ""}
+              </select>
+            </div>
+            <div className="col-2 p-2">
+              <label>Node Category</label>
+              {nodeType === "Material" ? (
                 <select
-                  style={{ width: "80px", height: "25px" }}
-                  onChange={handleNodeTypeChange}
-                  value={nodeType}
+                  style={{ height: "32px" }}
+                  onChange={handleNodeCategory}
+                  value={nodeCategory}
+                  className="form-control"
                 >
-                  <option hidden>Node Type</option>
-                  {data
-                    ? data.map((item) => (
-                        <option key={item.Type} value={item.Type}>
-                          {item.Type}
-                        </option>
-                      ))
-                    : ""}
+                  <option hidden>Please Select</option>
+                  <option>Finished Goods</option>
+                  <option>Work In Progress</option>
+                  <option>Raw Material</option>
+                  <option>Waste</option>
                 </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Material Type</td>
-              <td>
-                {nodeType === "Material" ? (
-                  <select
-                    style={{ width: "80px", height: "25px" }}
-                    onChange={handleNodeCategory}
-                    value={nodeCategory}
-                  >
-                    <option hidden>Please Select</option>
-                    {/* <option>Finished Goods</option>
-                    <option>Work In Progress</option>
-                    <option>Raw Material</option>
-                    <option>Waste</option> */}
-                    {Materialdata.map((item)=>
-                      <option>{item.materialName}</option>
-                    )}
-                  </select>
-                ) : (
-                  <select
-                    style={{ width: "80px", height: "30px" }}
-                    onChange={handleNodeCategory}
-                    value={nodeCategory}
-                    disabled
-                  >
-                    <option disabled>Please Select</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>Machine Type</td>
-              <td>
-                {nodeType === "Machine" ? (
-                  <select
-                    style={{ width: "80px", height: "25px" }}
-                    onChange={handleMachineType}
-                    value={MachineType}
-                  >
-                    <option>{MachineType}</option>
-                    {/* <option>Trucks</option>
-                    <option>Excavators</option> */}
-                    {Machinedata.map((item)=>
-                      <option>{item.machineName}</option>
-                    )}
-                    {/* <option>Raw Material</option>
-                    <option>Waste</option> */}
-                  </select>
-                ) : (
-                  <select
-                    style={{ width: "80px", height: "30px" }}
-                    onChange={handleMachineType}
-                    value={MachineType}
-                    disabled
-                  >
-                    <option disabled>Please Select</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>Label:</td>
-
-              <td>
-                <input
-                  type="text"
-                  value={label}
-                  style={{ width: "80px", height: "25px" }}
-                  onChange={handleLabelChange}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Item Description:</td>
-              <td>
-                <input
-                  type="text"
-                  value={itemDescription}
-                  placeholder="description"
-                  style={{ width: "80px", height: "25px" }}
-                  onChange={handleItemDescription}
-                />
-              </td>
-            </tr>
-            <div className="button-container pt-3">
-              <button className="btn btn-success" onClick={handleSave}>
-                <FaCheck />
+              ) : (
+                <select
+                  style={{ height: "32px" }}
+                  onChange={handleNodeCategory}
+                  value={nodeCategory}
+                  className="form-control"
+                  disabled
+                >
+                  <option disabled>Please Select</option>
+                </select>
+              )}
+            </div>
+            <div className="col-2 p-2">
+              <label>Source Position</label>
+              <select
+                style={{ height: "32px" }}
+                value={sourcePosition}
+                className="form-control"
+                onChange={handlesourcePosition}
+              >
+                <option value={sourcePosition} hidden>
+                  {sourcePosition}
+                </option>
+                <option>right</option>
+                <option>bottom</option>
+                <option>left</option>
+                <option>top</option>
+              </select>
+            </div>
+            <div className="col-2 p-2">
+              <label>Font-Color</label>
+              <input
+                type="color"
+                value={fontColor}
+                className="form-control"
+                onChange={handleFontColor}
+                style={{ height: "32px" }}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Upload Image</label>
+              <input
+                type="file"
+                className="form-control"
+                style={{ height: "32px" }}
+                onChange={HandleImage}
+              />
+            </div>
+          </div>
+          <div className="row" style={{ fontSize: "11px" }}>
+            <div className="col-2 p-2">
+              <label>Label:</label>
+              <input
+                type="text"
+                className="form-control"
+                value={label}
+                style={{ height: "32px" }}
+                onChange={handleLabelChange}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Item Description:</label>
+              <input
+                type="text"
+                value={itemDescription}
+                className="form-control"
+                placeholder="description"
+                style={{ height: "32px" }}
+                onChange={handleItemDescription}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Unit1 Measurable</label>
+              {nodeType === "Material" ? (
+                <select
+                  className="form-control"
+                  onChange={handleMeasurable}
+                  style={{ height: "32px" }}
+                  value={unit1Measurable}
+                >
+                  <option hidden>Please Select</option>
+                  <option value={"Yes"}>Yes</option>
+                  <option value={"No"}>No</option>
+                </select>
+              ) : (
+                <select
+                  disabled
+                  className="form-control"
+                  onChange={handleMeasurable}
+                  style={{ height: "32px" }}
+                >
+                  <option hidden>Please Select</option>
+                </select>
+              )}
+            </div>
+            <div className="col-2 p-2">
+              <label>Target Position</label>
+              <select
+                style={{ height: "32px" }}
+                value={targetPosition}
+                onChange={handletargetPosition}
+                className="form-control"
+              >
+                <option value={targetPosition} hidden>
+                  {targetPosition}
+                </option>
+                <option>left</option>
+                <option>top</option>
+                <option>right</option>
+                <option>bottom</option>
+              </select>
+            </div>
+            <div className="col-2 p-2">
+              <label>Bg-Color</label>
+              <input
+                type="color"
+                style={{ height: "32px" }}
+                className="form-control"
+                value={bgColor}
+                onChange={handleBackGroud}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Percentage Rejects</label>
+              <input
+                type="number"
+                style={{ height: "32px" }}
+                className="form-control"
+                value={PerRejects}
+                onChange={handlePerRejects}
+              />
+            </div>
+          </div>
+          <div className="row" style={{ fontSize: "11px" }}>
+            <div className="col-2 p-2">
+              <label>X-Position</label>
+              <input
+                type="text"
+                className="form-control"
+                value={xPosition}
+                onChange={handleXPositionChange}
+                style={{ height: "32px" }}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Y-Position</label>
+              <input
+                type="text"
+                className="form-control"
+                value={yPosition}
+                onChange={handleYPositionChange}
+                style={{ height: "32px" }}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Unit2 Mandatory</label>
+              {nodeType === "Material" ? (
+                <select
+                  onChange={handleMandatory}
+                  style={{ height: "32px" }}
+                  value={unit2Mandatory}
+                  className="form-control"
+                >
+                  <option hidden>Please Select</option>
+                  <option value={"Yes"}>Yes</option>
+                  <option value={"No"}>No</option>
+                </select>
+              ) : (
+                <select
+                  onChange={handleMandatory}
+                  style={{ height: "32px" }}
+                  value={unit2Mandatory}
+                  className="form-control"
+                  disabled
+                >
+                  <option hidden>Please Select</option>
+                </select>
+              )}
+            </div>
+            <div className="col-2 p-2">
+              <label>Font Size</label>
+              <input
+                type="text"
+                className="form-control"
+                value={fontsize}
+                onChange={handleFontSizeChange}
+                style={{ height: "32px" }}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Border-Color</label>
+              <input
+                type="color"
+                style={{ height: "32px" }}
+                value={borderColor}
+                className="form-control"
+                onChange={handleBorderCOlor}
+              />
+            </div>
+          </div>
+          <div className="row" style={{ fontSize: "11px" }}>
+            <div className="col-2 p-2">
+              <label>Width</label>
+              <input
+                type="text"
+                style={{ height: "32px" }}
+                value={width}
+                className="form-control"
+                onChange={handleWidthChange}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Height</label>
+              <input
+                type="text"
+                style={{ height: "32px" }}
+                value={height}
+                className="form-control"
+                onChange={handleHeightChange}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Border Width</label>
+              <select
+                style={{ height: "32px" }}
+                value={fontStyle}
+                onChange={handleFontstyle}
+                className="form-control"
+              >
+                <option value={fontStyle}>{fontStyle}</option>
+                <option>italic</option>
+                <option>normal</option>
+                <option>oblique</option>
+              </select>
+            </div>
+            <div className="col-2 p-2">
+              <label>Font-Style</label>
+              <input
+                type="text"
+                className="form-control"
+                style={{ height: "32px" }}
+                value={borderWidth}
+                onChange={handleborderWidth}
+              />
+            </div>
+            <div className="col-2 p-2">
+              <label>Border Color</label>
+              <select
+                style={{ height: "32px" }}
+                value={borderStyle}
+                onChange={handleborderStyle}
+                className="form-control"
+              >
+                <option value={borderStyle}>{borderStyle}</option>
+                <option>solid</option>
+                <option>dashed</option>
+                <option>dotted</option>
+              </select>
+            </div>
+          </div>
+          {/* <div className="row" style={{ fontSize: "11px" }}>
+          </div> */}
+          <div className="row" style={{ fontSize: "11px" }}>
+            <div className="col-3 p-2">
+              <button className="btn" id="Facheck" onClick={handleSave}>
+                {/* <FaCheck /> */}Submit
               </button>
               &nbsp;
-              <button className="btn btn-danger" onClick={onClose}>
-                <FaXmark />
+              <button className="btn"id="FaXmark" onClick={onClose}>
+                {/* <FaXmark /> */}Cancel
               </button>
             </div>
-          </table>
+          </div>
         </div>
-        <div className="col-3 p-2">
-          <table style={{ fontSize: "11px" }}>
-            <tr>
-              <td>Unit1 Measurable:</td>
-              <td>
-                {nodeType === "Material" ? (
-                  <select
-                    onChange={handleMeasurable}
-                    style={{ width: "80px", height: "25px" }}
-                    value={unit1Measurable}
-                  >
-                    <option hidden>Please Select</option>
-                    <option value={"Yes"}>Yes</option>
-                    <option value={"No"}>No</option>
-                  </select>
-                ) : (
-                  <select
-                    disabled
-                    onChange={handleMeasurable}
-                    style={{ width: "80px", height: "30px" }}
-                  >
-                    <option hidden>Please Select</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>Unit2 Mandatory:</td>
-              <td>
-                {nodeType === "Material" ? (
-                  <select
-                    onChange={handleMandatory}
-                    style={{ width: "80px", height: "25px" }}
-                    value={unit2Mandatory}
-                  >
-                    <option hidden>Please Select</option>
-                    <option value={"Yes"}>Yes</option>
-                    <option value={"No"}>No</option>
-                  </select>
-                ) : (
-                  <select
-                    onChange={handleMandatory}
-                    style={{ width: "80px", height: "25px" }}
-                    value={unit2Mandatory}
-                    disabled
-                  >
-                    <option hidden>Please Select</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>X-Position:</td>
-              <td>
-                <input
-                  type="text"
-                  value={xPosition}
-                  onChange={handleXPositionChange}
-                  style={{ width: "80px", height: "25px" }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Y-Position:</td>
-              <td>
-                <input
-                  type="text"
-                  value={yPosition}
-                  onChange={handleYPositionChange}
-                  style={{ width: "80px", height: "25px" }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Width:</td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "80px", height: "25px" }}
-                  value={width}
-                  onChange={handleWidthChange}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Height:</td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "80px", height: "25px" }}
-                  value={height}
-                  onChange={handleHeightChange}
-                />
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div className="col-3 p-2">
-          <table style={{ fontSize: "11px" }}>
-            <tr>
-              <td>Font-Style:</td>
-              <td>
-                <select
-                  style={{ width: "80px", height: "25px" }}
-                  value={fontStyle}
-                  onChange={handleFontstyle}
-                >
-                  <option value={fontStyle}>{fontStyle}</option>
-                  <option>italic</option>
-                  <option>normal</option>
-                  <option>oblique</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Font-Color:</td>
-              <td>
-                <input
-                  type="color"
-                  value={fontColor}
-                  onChange={handleFontColor}
-                  style={{ width: "80px", height: "25px" }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Border-Color:</td>
-              <td>
-                <input
-                  type="color"
-                  style={{ width: "80px", height: "25px" }}
-                  value={borderColor}
-                  onChange={handleBorderCOlor}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Bg-Color:</td>
-              <td>
-                <input
-                  type="color"
-                  style={{ width: "80px", height: "25px" }}
-                  value={bgColor}
-                  onChange={handleBackGroud}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Source Position:</td>
-              <td>
-                <select
-                  style={{ height: "25px", width: "80px" }}
-                  value={sourcePosition}
-                  onChange={handlesourcePosition}
-                >
-                  <option value={sourcePosition} hidden>{sourcePosition}</option>
-                  <option>right</option>
-                  <option>bottom</option>
-                  <option>left</option>
-                  <option>top</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Target Position:</td>
-              <td>
-                <select
-                  style={{ height: "25px", width: "80px" }}
-                  value={targetPosition}
-                  onChange={handletargetPosition}
-                >
-                  <option value={targetPosition} hidden>{targetPosition}</option>
-                  <option>left</option>
-                  <option>top</option>
-                  <option>right</option>
-                  <option>bottom</option>
-                </select>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div className="col-3 p-2">
-          <table style={{ fontSize: "11px" }}>
-            <tr>
-              <td>Font-Size:</td>
-              <td>
-                <input
-                  type="text"
-                  value={fontsize}
-                  onChange={handleFontSizeChange}
-                  style={{ width: "80px", height: "25px" }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Border Width:</td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "80px", height: "25px" }}
-                  value={borderWidth}
-                  onChange={handleborderWidth}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Border Color:</td>
-              <td>
-                <select
-                  style={{ height: "25px", width: "80px" }}
-                  value={borderStyle}
-                  onChange={handleborderStyle}
-                >
-                  <option value={borderStyle}>{borderStyle}</option>
-                  <option>solid</option>
-                  <option>dashed</option>
-                  <option>dotted</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Upload Image:</td>
-              <td>
-              {nodeType === "Machine" ? (
-                    <input type="file" onChange={HandleImage}/>) :<input type="file" disabled onChange={HandleImage}/>}
-                    {/* <input type="file" onChange={ (e) => { setFile(e.target.files[0]) } }/> */}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
       </form>
     </div>
   );

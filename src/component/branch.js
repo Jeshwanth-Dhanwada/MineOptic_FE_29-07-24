@@ -146,9 +146,7 @@ function Branch() {
       toast.success(
         <span><strong>successfully</strong> Added.</span>,
         {
-          position: toast.POSITION.TOP_RIGHT, // Set position to top center
-          // autoClose: 3000, // Optional: Set auto close time in milliseconds
-          // closeButton: false, // Optional: Hide close button
+          position: toast.POSITION.TOP_RIGHT,
           className: 'custom-toast' // Optional: Add custom CSS class
         }
       );
@@ -481,78 +479,54 @@ function Branch() {
             >
             <FaSistrix />
             </Button>
-          {/* </Tooltip> */}
-            {/* <h4 className="offset-0 pl-5"></h4> */}
             <br />
             <div className="row pt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4 ">
-                    <label htmlFor="Industry">Industry:</label>
-                  </div>
-                  <div className="col-8">
-                    <input
-                      type="text"
-                      id="Industry"
-                      name="Industry"
-                      className="form-control"
-                      value={Industry}
-                      onChange={handlesetIndustry}
-                      style={{fontSize:'11px'}}
-                      required
-                      placeholder="Enter Industry"
-                    />
-                  </div>
-                </div>
-              </div>  
-              <div className="col-6">
-                <div className="row">
-                  <div className="col-4">
-                    <label htmlFor="OrgID">Organisation ID:</label>
-                  </div>
-                  <div className="col-8">
-                    <input
-                      type="number"
-                      id="OrgID"
-                      name="OrgID"
-                      className="form-control"
-                      value={OrgID}
-                      onChange={handleOrgIdChange}
-                      style={{fontSize:'11px'}}
-                      required
-                      placeholder="Enter Organisation ID"
-                    />
-                  </div>
-                </div>
+              <div className="col-4">
+                    <label htmlFor="Industry">Industry</label>
+                      <input
+                        type="text"
+                        id="Industry"
+                        name="Industry"
+                        className="form-control"
+                        value={Industry}
+                        onChange={handlesetIndustry}
+                        style={{fontSize:'11px'}}
+                        required
+                        placeholder="Enter Industry"
+                      />
+              </div>
+              <div className="col-4">
+                    <label htmlFor="OrgID">Organisation ID</label>
+                      <input
+                        type="number"
+                        id="OrgID"
+                        name="OrgID"
+                        className="form-control"
+                        value={OrgID}
+                        onChange={handleOrgIdChange}
+                        style={{fontSize:'11px'}}
+                        required
+                        placeholder="Enter Organisation ID"
+                      />
+              </div>
+              <div className="col-4">
+                      <label htmlFor="BranchName">Branch Name:</label>
+                      <input
+                        type="text"
+                        id="BranchName"
+                        name="BranchName"
+                        className="form-control"
+                        value={BranchName}
+                        style={{fontSize:'11px'}}
+                        onChange={handleBranchName}
+                        required
+                        placeholder="Enter Branch Name"
+                      />
               </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="BranchName">Branch Name:</label>
-                  </div>
-                  <div className="col-8">
-                    <input
-                      type="text"
-                      id="BranchName"
-                      name="BranchName"
-                      className="form-control"
-                      value={BranchName}
-                      style={{fontSize:'11px'}}
-                      onChange={handleBranchName}
-                      required
-                      placeholder="Enter Branch Name"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
-                  <div className="col-4">
-                    <label htmlFor="Location">Location:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="row pt-3">
+              <div className="col-4">
+                  <label htmlFor="Location">Location</label>
                     <input
                       type="text"
                       id="Location"
@@ -565,16 +539,8 @@ function Branch() {
                       placeholder="Enter Location"
                     />
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="Address">Address:</label>
-                  </div>
-                  <div className="col-8">
+                  <div className="col-4">
+                  <label htmlFor="Address">Address</label>
                     <input
                       type="text"
                       id="Address"
@@ -587,14 +553,8 @@ function Branch() {
                       placeholder="Enter Address"
                     />
                   </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
                   <div className="col-4">
-                    <label htmlFor="ContactPerson">Contact Person:</label>
-                  </div>
-                  <div className="col-8">
+                  <label htmlFor="ContactPerson">Contact Person</label>
                     <input
                       type="text"
                       id="ContactPerson"
@@ -607,16 +567,11 @@ function Branch() {
                       placeholder="Enter Person Name"
                     />
                   </div>
-                </div>
-              </div>
             </div>
+            
             <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="ContactNumber">Contact Number:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="col-4">
+                  <label htmlFor="ContactNumber">Contact Number</label>
                     <input
                       type="tel"
                       id="ContactNumber"
@@ -629,14 +584,8 @@ function Branch() {
                       placeholder="Enter Contact Number"
                     />
                   </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
                   <div className="col-4">
-                    <label htmlFor="emailId">Contact Email ID:</label>
-                  </div>
-                  <div className="col-8">
+                  <label htmlFor="emailId">Contact Email ID</label>
                     <input
                       type="email"
                       id="emailId"
@@ -649,22 +598,17 @@ function Branch() {
                       placeholder="Enter Email"
                     />
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-3">
-              
             </div>
             <br />
             <div className=" row">
               <div className="col-6">
                 <div className=" offset-0 col-6">
-                  <button className=" btn btn-success btn-sm" type="submit">
-                    <FaCheck />
+                  <button className=" btn btn-sm" id="Facheck" type="submit">
+                    {/* <FaCheck /> */}Add
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={emptyfields}>
+                    {/* <FaXmark /> */}Cancel
                   </a>
                 </div>
               </div>
@@ -675,9 +619,8 @@ function Branch() {
       :
       <form>
         <div className="container">
-          <div className="col-12 p-2">
+          <div className="col-12 pt-2">
           <button className="btn btn-primary btn-sm" onClick={emptyfields}>Go Back</button>
-          
             <Button 
                 class="btn btn-danger btn-sm" 
                 onClick={handleClickdeletepopup}
@@ -714,14 +657,11 @@ function Branch() {
                 </DialogActions>
               </Dialog>
             </React.Fragment>
+            </div>
             <br />
-            <div className="row pt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4 ">
-                    <label htmlFor="Industry">Branch ID:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="row t-3">
+            <div className="col-4">
+                  <label htmlFor="Industry">Branch ID</label>
                     <input
                       type="text"
                       id="Industry"
@@ -732,17 +672,9 @@ function Branch() {
                       // onChange={handleIndustry}
                       disabled
                     />
-                  </div>
-                </div>
-              </div>  
             </div>
-            <div className="row pt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4 ">
-                    <label htmlFor="Industry">Industry:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="col-4">
+                  <label htmlFor="Industry">Industry:</label>
                     <input
                       type="text"
                       id="Industry"
@@ -754,15 +686,9 @@ function Branch() {
                       required
                       placeholder="Enter Industry"
                     />
-                  </div>
-                </div>
-              </div>  
-              <div className="col-6">
-                <div className="row">
-                  <div className="col-4">
-                    <label htmlFor="OrgID">Organisation ID:</label>
-                  </div>
-                  <div className="col-8">
+            </div>
+            <div className="col-4">
+                  <label htmlFor="OrgID">Organisation ID</label>
                     <input
                       type="number"
                       id="OrgID"
@@ -775,16 +701,10 @@ function Branch() {
                       placeholder="Enter Organisation ID"
                     />
                   </div>
-                </div>
-              </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="BranchName">Branch Name:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="row pt-3">
+            <div className="col-4">
+                  <label htmlFor="BranchName">Branch Name</label>
                     <input
                       type="text"
                       id="BranchName"
@@ -796,15 +716,9 @@ function Branch() {
                       required
                       placeholder="Enter Branch Name"
                     />
-                  </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
-                  <div className="col-4">
-                    <label htmlFor="Location">Location:</label>
-                  </div>
-                  <div className="col-8">
+            </div>
+            <div className="col-4">
+                  <label htmlFor="Location">Location</label>
                     <input
                       type="text"
                       id="Location"
@@ -816,17 +730,9 @@ function Branch() {
                       required
                       placeholder="Enter Location"
                     />
-                  </div>
-                </div>
-              </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="Address">Address:</label>
-                  </div>
-                  <div className="col-8">
+            <div className="col-4">
+                  <label htmlFor="Address">Address</label>
                     <input
                       type="text"
                       id="Address"
@@ -839,14 +745,11 @@ function Branch() {
                       placeholder="Enter Address"
                     />
                   </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
+            </div>
+            <div className="row mt-3">
+            
                   <div className="col-4">
-                    <label htmlFor="ContactPerson">Contact Person:</label>
-                  </div>
-                  <div className="col-8">
+                  <label htmlFor="ContactPerson">Contact Person</label>
                     <input
                       type="text"
                       id="ContactPerson"
@@ -859,16 +762,8 @@ function Branch() {
                       placeholder="Enter Person Name"
                     />
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-3">
-              <div className="col-6">
-                <div className="row">
-                  <div className="offset-0 col-4">
-                    <label htmlFor="ContactNumber">Contact Number:</label>
-                  </div>
-                  <div className="col-8">
+                  <div className="col-4">
+                  <label htmlFor="ContactNumber">Contact Number</label>
                     <input
                       type="tel"
                       id="ContactNumber"
@@ -881,14 +776,8 @@ function Branch() {
                       placeholder="Enter Contact Number"
                     />
                   </div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="row">
                   <div className="col-4">
-                    <label htmlFor="emailId">Contact Email ID:</label>
-                  </div>
-                  <div className="col-8">
+                  <label htmlFor="emailId">Contact Email ID</label>
                     <input
                       type="email"
                       id="emailId"
@@ -901,28 +790,22 @@ function Branch() {
                       placeholder="Enter Email"
                     />
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-3">
-              
             </div>
             <br />
             <div className=" row">
               <div className="col-6">
                 <div className=" offset-0 col-6">
-                  <button className=" btn btn-success btn-sm" onClick={UpdateBranch}>
-                    <FaCheck />
+                  <button className=" btn btn-sm" id="Facheck" onClick={UpdateBranch}>
+                    {/* <FaCheck /> */}update
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={emptyfields}>
+                    {/* <FaXmark /> */}Cancel
                   </a>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       </form>
       }
       <ToastContainer />

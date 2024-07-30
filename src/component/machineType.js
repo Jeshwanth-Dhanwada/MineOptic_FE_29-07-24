@@ -365,10 +365,8 @@ function MachineType() {
               </Tooltip>
               {/* <h4 className="offset-0">Shift Form</h4><br/> */}
               <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MachineName">Machine Name:</label>
-                </div>
                 <div className="col-4">
+                  <label htmlFor="MachineName">Machine Name:</label>
                   <input
                     type="text"
                     id="MachineName"
@@ -381,23 +379,8 @@ function MachineType() {
                     required
                   />
                 </div>
-              </div>
-              <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MachineCategory">Machine Category ID:</label>
-                </div>
                 <div className="col-4">
-                  {/* <input
-                    type="text"
-                    id="MachineCategory"
-                    name="MachineCategory"
-                    className="form-control"
-                    placeholder="Enter MachineCategory"
-                    value={MachineCateId}
-                    style={{ fontSize: "11px" }}
-                    onChange={handleMachineCategory}
-                    required
-                  /> */}
+                  <label htmlFor="MachineCategory">Machine Category ID:</label>
                   <select className="m-1 form-control" style={{ fontSize: "11px" }} onChange={handleMachineCategory} value={MachineCateId}>
                     <option hidden>Machine Category ID</option>
                               {machineCategory?.map((item) =>
@@ -409,12 +392,12 @@ function MachineType() {
               <br />
               <div className="offset-0 row">
                 <div className="col-2">
-                  <button className=" btn btn-success btn-sm" type="submit">
-                    <FaCheck />
+                  <button className=" btn btn-sm" id="Facheck" type="submit">
+                    Add
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={Emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={Emptyfields}>
+                    Cancel
                   </a>
                 </div>
               </div>
@@ -465,10 +448,8 @@ function MachineType() {
                 </Dialog>
               </React.Fragment>
               <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MachineName">Machine Name:</label>
-                </div>
                 <div className="col-4">
+                <label htmlFor="MachineName">Machine Name:</label>
                   <input
                     type="text"
                     id="MachineName"
@@ -481,19 +462,20 @@ function MachineType() {
                     required
                   />
                 </div>
-              </div>
+              </div><br/>
               <div className="offset-0 row">
                 <div className="col-2">
                   <button
                     type="submit"
                     onClick={UpdateShift}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-sm"
+                    id="Facheck"
                   >
-                    <FaCheck />
+                    Add
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={Emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={Emptyfields}>
+                    Cancel
                   </a>
                 </div>
               </div>

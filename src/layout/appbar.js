@@ -125,7 +125,7 @@ const AppBarContainer = () => {
             position: "fixed",
             height: "45px",
             // backgroundColor:'#fc9445'
-            backgroundColor:'#fc9445'
+            backgroundColor:'#ffffff'
             }}>
       <DashboardDrawer drawerOption="bottom" openDrawer={openDrawer} closeDrawer={closeDrawer} />
       <Container maxWidth="xl">
@@ -141,7 +141,7 @@ const AppBarContainer = () => {
               <Box
                 component="img"
                 sx={{
-                  height: 39,
+                  height: 40,
                   // width: 125,
                   maxHeight: { xs: 233, md: 167 },
                   maxWidth: { xs: 350, md: 250 },

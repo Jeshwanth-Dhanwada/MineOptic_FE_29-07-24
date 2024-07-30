@@ -101,7 +101,7 @@ function Nodesdata(nodeIdselected) {
       >
         <div className="row">
           <div className="col-12">
-            <table className="table table-bordered table-striped">
+            <table className="table table-bordered tablestriped">
               <thead className="sticky-top">
                 <tr>
                   <th style={{ fontSize: "11px" }}>Node Id</th>

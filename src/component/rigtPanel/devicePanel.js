@@ -39,7 +39,7 @@ const DevicePanel = ({ Oadetails }) => {
   return (
     <aside>
       <div className="employee-list-container">
-        <table className="table table-bordered table-striped">
+        <table className="table table-bordered tablestriped">
           <thead style={{ fontSize: "small" }} className="sticky-top">
             <tr>
               <th style={{fontSize:'11px'}}>Id</th>

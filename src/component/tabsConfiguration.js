@@ -101,11 +101,11 @@ export default function BasicConfigurationTabs({
                 value={value}
                 onChange={handleChange}
                 aria-label="basic tabs example"
-                style={{background:'#09587c'}}
+                style={{background:'#ffffff'}}
               >
-                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c" }} onClick={() => HandleBottomtoLeftSlide("")} label="Nodes" {...a11yProps(0)} />
-                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#FFFFFF', backgroundColor: value === 1 ? "#fc9445" : "#09587c" }} onClick={() => HandleBottomtoLeftSlide("Staff Mapping")} label="Staff Mapping" {...a11yProps(1)} />
-                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#FFFFFF', backgroundColor: value === 2 ? "#fc9445" : "#09587c" }} onClick={() => HandleBottomtoLeftSlide("Device Mapping")} label="Device Mapping" {...a11yProps(2)} />
+                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("")} label="Nodes" {...a11yProps(0)} />
+                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("Staff Mapping")} label="Staff Mapping" {...a11yProps(1)} />
+                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("Device Mapping")} label="Device Mapping" {...a11yProps(2)} />
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>

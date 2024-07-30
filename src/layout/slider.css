@@ -82,3 +82,13 @@
   table tbody tr {
     font-size: small;
   }
+
+  #Facheck{
+    background-color:#034661;
+    color:#ffffff
+  }
+  #FaXmark{
+    background-color: #ffffff;
+    color: #034661;
+    border: 1px solid #034661;
+  }

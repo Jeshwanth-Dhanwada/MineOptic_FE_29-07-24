@@ -361,10 +361,8 @@ function MaterialNodeType() {
               </Tooltip>
               {/* <h4 className="offset-0">Shift Form</h4><br/> */}
               <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MaterialName">Material Name:</label>
-                </div>
                 <div className="col-4">
+                  <label htmlFor="MaterialName">Material Name:</label>
                   <input
                     type="text"
                     id="MaterialName"
@@ -377,23 +375,8 @@ function MaterialNodeType() {
                     required
                   />
                 </div>
-              </div>
-              <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MaterialCategory">Material Category ID:</label>
-                </div>
                 <div className="col-4">
-                  {/* <input
-                    type="text"
-                    id="MaterialCategory"
-                    name="MaterialCategory"
-                    className="form-control"
-                    placeholder="Enter MaterialCategory"
-                    value={MaterialCateID}
-                    style={{ fontSize: "11px" }}
-                    onChange={handleMaterialCateID}
-                    required
-                  /> */}
+                  <label htmlFor="MaterialCategory">Material Category ID:</label>
                   <select className=" form-control" style={{ fontSize: "11px" }} onChange={handleMaterialCateID} value={MaterialCateID}>
                     <option hidden>Material Category ID</option>
                               {MaterialCateData?.map((item) =>
@@ -405,12 +388,12 @@ function MaterialNodeType() {
               <br />
               <div className="offset-0 row">
                 <div className="col-2">
-                  <button className=" btn btn-success btn-sm" type="submit">
-                    <FaCheck />
+                  <button className=" btn btn-sm" id="Facheck" type="submit">
+                    Add
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={Emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={Emptyfields}>
+                    Cancel
                   </a>
                 </div>
               </div>
@@ -461,10 +444,8 @@ function MaterialNodeType() {
                 </Dialog>
               </React.Fragment>
               <div className="offset-0 row mt-3">
-                <div className="col-2">
-                  <label htmlFor="MaterialName">Material Name:</label>
-                </div>
                 <div className="col-4">
+                  <label htmlFor="MaterialName">Material Name:</label>
                   <input
                     type="text"
                     id="MaterialName"
@@ -477,19 +458,20 @@ function MaterialNodeType() {
                     required
                   />
                 </div>
-              </div>
+              </div><br/>
               <div className="offset-0 row">
                 <div className="col-2">
                   <button
                     type="submit"
                     onClick={UpdateShift}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-sm"
+                    id="Facheck"
                   >
-                    <FaCheck />
+                    Add
                   </button>
                   &nbsp;
-                  <a className="btn btn-danger btn-sm" onClick={Emptyfields}>
-                    <FaXmark />
+                  <a className="btn btn-sm" id="FaXmark" onClick={Emptyfields}>
+                    Cancel
                   </a>
                 </div>
               </div>

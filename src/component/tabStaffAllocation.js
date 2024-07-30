@@ -252,7 +252,7 @@ function StaffAllocation() {
           className="container-fluid"
           style={{ width: "100%", height: "450px",overflowY:'auto' }}
         >
-          <table className="table table-bordered table-striped">
+          <table className="table table-bordered tablestriped">
             <thead className="sticky-top">
               <tr>
                 <th style={{fontSize: "11px"}}>Id</th>
@@ -510,8 +510,8 @@ function StaffAllocation() {
             </tbody>
           </table>
           <div className=''>
-            <Button onClick={handleAddNewRow} style={{ marginLeft: '5px',background:'#09587c' }}>
-              <FaPlus style={{color:'white'}}/>
+            <Button onClick={handleAddNewRow} id='addbutton' style={{ marginLeft: '5px'}}>
+              <FaPlus/>
             </Button>
           </div>
           {OpenLoader && (

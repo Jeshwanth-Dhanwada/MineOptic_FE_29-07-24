@@ -395,7 +395,7 @@ function Organisation() {
         <form onSubmit={handleSubmit} style={{fontSize:'11px'}}>
         <div className="container" >
         <div className="col-12 p-2">
-          <Tooltip title="Search Location" placement="right-start">
+          <Tooltip title="Search Organisation" placement="right-start">
           <Button
             variant="contained"
             class="btn btn-primary btn-sm"
@@ -405,10 +405,8 @@ function Organisation() {
           </Button>
           </Tooltip>
           <div className="offset-0 row mt-3">
-            <div className="col-2">
-              <label htmlFor="Name">Organisation Name:</label>
-            </div>
             <div className="col-4">
+              <label htmlFor="Name">Organisation Name:</label>
               <input
                 id="Name"
                 name="Name"
@@ -420,12 +418,8 @@ function Organisation() {
               >
               </input>
             </div>
-          </div>
-          <div className="offset-0 row mt-2">
-            <div className="col-2">
-              <label htmlFor="Location">Location ID :</label>
-            </div>
             <div className="col-4">
+              <label htmlFor="Location">Location ID :</label>
               <select
                 type="text"
                 id="Location"
@@ -441,12 +435,8 @@ function Organisation() {
                     <option>1</option>
               </select>
             </div>
-          </div>
-          <div className="offset-0 row mt-2">
-            <div className="col-2">
-              <label htmlFor="Location Type">Location Type:</label>
-            </div>
             <div className="col-4">
+              <label htmlFor="Location Type">Location Type:</label>
               <select
                 id="Location Type"
                 name="Location Type"
@@ -461,6 +451,16 @@ function Organisation() {
                     <option>1</option>
               </select>
             </div>
+          </div>
+          <div className="offset-0 row mt-2">
+            <div className="col-2">
+            </div>
+            
+          </div>
+          <div className="offset-0 row mt-2">
+            <div className="col-2">
+            </div>
+            
           </div>
           {/* <div className="offset-0 row mt-2">
             <div className="col-2">
@@ -480,19 +480,19 @@ function Organisation() {
               />
             </div>
           </div> */}
-          <br />
           <div className="offset-0 row">
             <div className="col-2">
               <button
-                className="btn btn-success btn-sm"
+                className="btn btn-sm"
                 type="submit"
                 // onClick={handleSubmit}
+                id="Facheck"
               >
-                <FaCheck />
+                Add
               </button>
               &nbsp;
-              <a className="btn btn-danger btn-sm" onClick={emptyfields}>
-                <FaXmark />
+              <a className="btn btn-sm" id="FaXmark" onClick={emptyfields}>
+                Cancel
               </a>
             </div>
           </div>

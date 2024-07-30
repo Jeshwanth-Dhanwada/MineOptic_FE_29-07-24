@@ -331,10 +331,8 @@ function MachineCategory() {
               </Button>
           </Tooltip>
           <div className="offset-0 row mt-3">
-            <div className="col-2">
-              <label htmlFor="MachineCategory">Machine Category:</label>
-            </div>
             <div className="col-4">
+              <label htmlFor="MachineCategory">Machine Category:</label>
               <input
                id="MachineCategory"
                name="MachineCategory"
@@ -352,15 +350,16 @@ function MachineCategory() {
           <br/>
           <div className="offset-0 row">
             <div className="col-2">
-            <button className=" btn btn-success btn-sm">
-            <FaCheck />
+            <button className=" btn btn-sm" id="Facheck">
+            Add
           </button>
           &nbsp;
           <a 
-            className="btn btn-danger btn-sm"
+            className="btn btn-sm"
             onClick={Emptyfields}
+            id="FaXmark"
           >
-            <FaXmark />
+            Cancel
           </a>
             </div>
           </div>
@@ -409,11 +408,9 @@ function MachineCategory() {
               </Dialog>
             </React.Fragment>
             <div className="offset-0 row mt-3">
-            <div className="col-2">
-              <label htmlFor="MaterialCategory">Material Category ID:</label>
-            </div>
             <div className="col-4">
-              <textarea
+              <label htmlFor="MaterialCategory">Material Category ID:</label>
+              <input
               id="ProductTypeDescription"
               name="ProductTypeDescription"
               className="form-control"
@@ -423,14 +420,10 @@ function MachineCategory() {
               // onChange={handleEditproductDesc}
               disabled
               >
-              </textarea>
-            </div>
-          </div>
-          <div className="offset-0 row mt-3">
-            <div className="col-2">
-              <label htmlFor="ProductTypeDescription">Product Type Description:</label>
+              </input>
             </div>
             <div className="col-4">
+              <label htmlFor="ProductTypeDescription">Product Type Description:</label>
               <textarea
               id="ProductTypeDescription"
               name="ProductTypeDescription"

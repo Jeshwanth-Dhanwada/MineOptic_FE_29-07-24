@@ -66,6 +66,8 @@ import DevicePanel from "./rigtPanel/devicePanel.js";
 import Priorityjobspanel from "./rigtPanel/Priority_jobspanel.js";
 import RightSlider from "../layout/RightSlider.js";
 import FGmapping from "./FGMapping.js";
+import { BsPlusLg } from "react-icons/bs";
+import { RiDeleteBinLine } from "react-icons/ri";
 let directionOn = "";
 
 const connectionLineStyle = { stroke: "black" };
@@ -2798,10 +2800,10 @@ if (parentNode) {
                               value={value} 
                               onChange={handleChange} 
                               aria-label="basic tabs example"
-                              style={{background:'#09587c'}}
+                              style={{background:'#ffffff'}}
                               >
-                            <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c" }} onClick={() => HandlebottomSlide("Staff")} label="Staff" {...a11yProps(0)} />
-                            <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#FFFFFF', backgroundColor: value === 1 ? "#fc9445" : "#09587c" }} onClick={() => HandlebottomSlide("Device")} label="Device" {...a11yProps(1)} />
+                            <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandlebottomSlide("Staff")} label="Staff" {...a11yProps(0)} />
+                            <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandlebottomSlide("Device")} label="Device" {...a11yProps(1)} />
                           </Tabs>
                         </Box>
                         {/* <CustomTabPanel value={value} index={0}>
@@ -2879,12 +2881,14 @@ if (parentNode) {
                     placement="right"
                   >
                     <Button
-                      style={{ width: "50px", background: '#09587c' }}
+                      style={{ width: "50px", border:'1px solid #ECECEF' }}
                       className="mt-2"
-                      variant="primary"
+                      variant="white"
+                      id="savebutton"
                       onClick={onAddNode}
                     >
-                      <FaPlus />
+                      <BsPlusLg id="icon" style={{fontSize:'20px',color:'7C7C7C'}}/>
+                      {/* <FaPlus style={{color:'7C7C7C'}}/> */}
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
@@ -2893,14 +2897,13 @@ if (parentNode) {
                     placement="right"
                   >
                     <Button
-                      style={{ width: "50px" }}
+                      style={{ width: "50px",border:'1px solid #ECECEF'}}
                       className="mt-2"
-                      variant="danger"
+                      variant="white"
+                      id="savebutton"
                       onClick={deleteSelectedElements}
-                    // onClick={() => handleButtonDelete(edge.id)}
                     >
-                      {" "}
-                      <FaTrash />
+                      <RiDeleteBinLine id="icon" style={{fontSize:'20px',color:'7C7C7C'}}/>
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
@@ -2909,12 +2912,13 @@ if (parentNode) {
                     placement="right"
                   >
                     <Button
-                      style={{ width: "50px", background: '#09587c' }}
+                      style={{ width: "50px", border:'1px solid #ECECEF'}}
                       className="mt-2"
-                      variant="primary"
+                      id="savebutton"
+                      variant="white"
                       onClick={handleEdgesandNodes}
                     >
-                      <FaSave />
+                      <FaSave id="icon" style={{fontSize:'20px',color:'7C7C7C'}}/>
                     </Button>
                   </OverlayTrigger>
                 </div>
@@ -2922,8 +2926,6 @@ if (parentNode) {
                   <div style={{ position: "absolute", top: 123, right: 0 }}>
                     {nodes.map((node) => (
                       <div key={node.id} className="node">
-                        {/* <div>{node.data.label}</div> */}
-                        {/* Edit button */}
                         {node.selected && (
                           <div
                             style={{
@@ -2956,40 +2958,11 @@ if (parentNode) {
                     ))}
                   </div>
                   <div style={{ position: "absolute", top: 165, right: 0 }}>
-                    {edges.map((edge) => (
+                    {/* {edges.map((edge) => (
                       <div key={edge.id} className="edge">
-                        {/* <div>{node.data.label}</div> */}
-                        {/* Edit button */}
-                        {/* {edge.selected && (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBottom: "5px",
-                            marginRight: "-5px",
-                          }}
-                        >
-                          <OverlayTrigger
-                            delay={{ hide: 450, show: 300 }}
-                            overlay={(props) => (
-                              <Tooltip {...props}>Update Edge</Tooltip>
-                            )}
-                            placement="left"
-                          >
-                            <Button
-                              className="edit-button mt-2"
-                              variant="primary"
-                              // size="sm"
-                              style={{ width: "50px" }}
-                              onClick={() => handleEditEdge(edge)}
-                            >
-                              <FaEdit></FaEdit>
-                            </Button>
-                          </OverlayTrigger>
-                        </div>
-                      )} */}
+                       
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                   <div style={{ position: "absolute", top: -22, right: -10 }}>
                     {selectedNodeForEdit && (
