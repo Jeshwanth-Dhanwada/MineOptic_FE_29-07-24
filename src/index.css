@@ -21,3 +21,28 @@ code {
   margin: 5px 10px;
   cursor: pointer;
 }
+
+#map {
+  height: 100vh;
+}
+
+.map {
+  height: 100vh;
+}
+
+.home {
+  position: relative;
+}
+
+.highlight {
+  background: #e9ffe3;
+}
+
+.toolbox {
+  height: 100vh;
+  overflow-y: auto;
+
+  a {
+    cursor: pointer;
+  }
+}
