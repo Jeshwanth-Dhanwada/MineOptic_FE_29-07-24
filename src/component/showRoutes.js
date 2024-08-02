@@ -297,7 +297,7 @@ const ShowRoutes = ({
               height: data.height,
               borderRadius: data.borderRadius,
               display: data.borderRadius ? 'flex' : '',
-              alignItems: data.nodeImage == null ? 'center' : "",
+              alignItems: data.nodeImage === "" ? 'center' : "",
               justifyContent: 'center',
               // fontFamily:'Bold'
               // fontColor: data.FontColor,

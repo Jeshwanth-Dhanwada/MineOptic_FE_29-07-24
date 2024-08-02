@@ -38,7 +38,9 @@ import WorkingHourSchedule from '../component/WorkingHourSchedule';
 import GantCharts from '../component/gantCharts';
 import SveltaTree from '../component/sveltCharts';
 import SveltaWithDropDown from '../component/svelteChartsdropdown';
-import TipperView from '../views/tipperView'
+import SveltaWithDropDownExa from '../component/svelta';
+import TipperView from '../views/tipperView';
+
 // import showNodes
 
 function DashboardLayout(props) {
@@ -312,6 +314,7 @@ function DashboardLayout(props) {
           <Route path="/sveltCharts" element={<SveltaTree/>} />
           <Route path="/SveltaWithDropDown" element={<SveltaWithDropDown/>} />
           <Route path="/TipperView" element={<TipperView/>} />
+          <Route path="/SveltaWithDropDownExa" element={<SveltaWithDropDownExa/>} />
         </Route>
         </Routes>
         </div>
