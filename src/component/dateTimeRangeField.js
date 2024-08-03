@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import './dateTime.css';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -9,6 +9,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { IconButton, TextField } from '@mui/material';
+import { debounce } from 'lodash';
 
 export default function DateTimeRangeField({ dateRange, setDateRange, minDateTime, endTime, setEndTime, style }) {
   // const [minDate, setMinTime] = useState(date)
@@ -25,7 +26,7 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
 
   // const [open, setOpen] = useState(false);
   const [timeDifference, setTimeDifference] = useState('');
-  const [duration, setDuration] = useState();
+  const [duration, setDuration] = useState(0);
 
   const getMinDate = () => {
     const moment = require('moment');
@@ -42,14 +43,18 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
   };
   // const hasTime = parsedDate.hour() !== 0 || parsedDate.minute() !== 0;
 
+
+
   const handleEndTimeChange = (value) => {
     const durationInMinutes = value.minute();
     setDuration(durationInMinutes);
     const endTimecal = dayjs(dateRange).add(durationInMinutes, 'minutes');
     setEndTime(endTimecal.toISOString());
+    console.log("duration:", duration, durationInMinutes);
   };
 
   const minDate = dayjs('2021-06-24 16:31');
+
 
   return (
     <div className="d-flex flex-row">
@@ -71,25 +76,20 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
                 onChange={handleStartDateTimeChange}
                 format="YYYY/MM/DD HH:mm"
                 style={style}
-              /> <span style={{ marginTop: '30px' }}> - </span>
-              {/* <IconButton fontSize='40px' onClick={() => setOpen(true)}>
-              <AccessTimeIcon />
-            </IconButton> */}
+              /> <span style={{ marginTop: '10px',padding:"5px"}}> - </span>
               <TimePicker
-                // open={open}
-                // onClose={() => setOpen(false)}
-                // value={endTime ? dayjs(endTime) : null}
-                value={duration ? dayjs().minute(duration) : null}
+                value={dayjs(`${duration}`, 'mm')}
                 onChange={handleEndTimeChange}
                 ampm={false}
                 views={['minutes']}
                 format='mm'
                 viewRenderers={{
-                  hours: renderTimeViewClock,
+                  // hours: renderTimeViewClock,
                   minutes: renderTimeViewClock,
                 }}
                 label="Duration in Minutes"
                 maxTime={dayjs(dateRange).add(1, 'hour')}
+                disableToolbar={true}
               />
               {/* <TimePicker
               viewRenderers={{

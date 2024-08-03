@@ -20,6 +20,7 @@ import { ColorPicker } from 'primereact/colorpicker';
 import { Button } from 'primereact/button';
 
 
+
 let cordinates = {};
 const TipperView = () => {
   const [tipperData, setTipperData] = useState([]);
@@ -130,7 +131,6 @@ const TipperView = () => {
     const exacvtrData = await getExacavators(getDateTimeViewFormat(dateRange[0], true), getDateTimeViewFormat(dateRange[1], true))
     // const exacvtrData = await getExacavators(getDateTimeViewFormat(dateRange[0], true), getDateTimeViewFormat(dateRange[1], true))
     const locs = await getAllLocations();
-    console.log("locations:", locs)
     setLocations(locs);
     setInitialDate(res[0].trackTime);
     setMinDateTime(res[0].trackTime)
@@ -139,7 +139,6 @@ const TipperView = () => {
     cordinates = { x: Math.min(...[+coverage.x, escCoverate.x]), y: Math.max(...[+coverage.y, escCoverate.y]) };
     setTipperData(res.map(a => ({ ...a, lat: a.latitude, lng: a.longitude })));
     setExacavatorData(exacvtrData.map(a => ({ ...a, lat: a.latitude, lng: a.longitude })))
-    console.log("res:", res)
 
     setGroupedTipppers(groupedData);
     setGroupedExacavators(groupedExacavator);
@@ -229,71 +228,102 @@ const TipperView = () => {
     setSelectedEscavator({ excid: e.target.value })
   }
 
-  const [cities, setCities] = useState([])
   const tipperOptions = [...availableTrippers];
   const excavatorOptions = [...availableEscavators];
   const reloadMap = () => {
     setMapKey(mapKey + 1);
   };
 
-  return <>
-    <div className="container-fluid" style={{ overflowY: "hidden" }} >
-      <div className="d-flex flex-row justify-content-start" style={{ position: 'fixed', background: '#fff', zIndex: 1 , width: '100%' }}>
-        <div >
-          <Timer {...timerProps} style={{marginTop:"15px"}}/>
-        </div>
-        {/* <MultiSelect value={cities} options={citySelectItems} onChange={(e) => setCities(e.value)} /> */}
-        <div>
-          <MultiSelect value={selectedTipper.tipperid} onChange={handleChangeTipper} options={tipperOptions}
-            filter placeholder="Tippers" maxSelectedLabels={3} style={{ height: "45px", width: "120px", marginTop: "8px" }}
 
-          // itemTemplate={(option) => (
-          //   <div>
-          //     <ColorPicker
-          //       style={{ marginLeft: '90px' }}
-          //       // value={color}
-          //       onChange={(e) => setColor(e.value)}
-          //     />
-          //   </div>
-          // )}
+  return <>
+    <div className="container-fluid" style={{ overflowY: "hidden" }}>
+      <div className="row d-flex flex-row" style={{
+        position: 'fixed',
+        background: '#fff',
+        // zIndex: 1,
+        marginRight:"0px",
+        marginLeft:"0px",
+        height: "11%",
+        width: '100%',
+        padding: '10px 0', // add some padding to make it look better
+      }}>
+        <div className="col-md-1 col-lg-2 text-center" style={{ marginTop: "5px" }}>
+          <Timer {...timerProps} />
+        </div>
+        
+        <div className="col-md-3 col-lg-3" >
+        {/* <div className="card flex justify-content-center">
+           
+        </div> */}
+          <div className="d-flex">
+            <MultiSelect
+              value={selectedTipper.tipperid}
+              onChange={handleChangeTipper}
+              options={tipperOptions}
+              filter
+              placeholder="Tippers"
+              maxSelectedLabels={3}
+              style={{
+                height: "45px",
+                width: "120px",
+                marginTop: "8px",
+                marginRight: "10px", // add some margin to separate it from the next element
+              }}
+            />
+            <MultiSelect
+              required
+              value={selectedEscavator.excid}
+              onChange={handleChangeEscavator}
+              options={excavatorOptions}
+              filter
+              placeholder="Excavators"
+              maxSelectedLabels={3}
+              style={{
+                height: "45px",
+                width: "120px",
+                marginTop: "8px",
+                // marginRight: "10px", // add some margin to separate it from the next element
+              }}
+            />
+
+            <InputSelect
+              required
+              type="number"
+              labelId="tipper-speed-select-label"
+              label="Speed"
+              className="tippers-select"
+              placeholder="Select Speed"
+              selectedVal={trucksSpeed}
+              handleSelect={handleChangeTruckSpeed}
+              suffix="X"
+              style={{
+                height: "45px",
+                width: "120px",
+                marginRight: "10px", // add some margin to separate it from the next element
+              }}
+              options={Array(5).fill(1).map((a, i) => i + 1)}
+            />
+          </div>
+        </div>
+        <div className="col-md-4 col-lg-4" style={{height:"20px"}}>
+          <DateTimeRangeField
+            dateRange={datestartRange}
+            setDateRange={setdatestartRange}
+            minDateTime={minDateTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
           />
         </div>
-
-        <MultiSelect required value={selectedEscavator.excid} onChange={handleChangeEscavator} options={excavatorOptions}
-          filter placeholder="Excavators" maxSelectedLabels={3} style={{ height: "45px", width: "120px", marginTop: "8px", marginLeft: "5px" }} />
-
-        {/* <NumberInputIntroduction value={1}  style={{ height: "52px", width: "120px"}}/> */}
-        <InputSelect
-          required
-          type="number"
-          labelId="tipper-speed-select-label"
-          label="Speed"
-          className="tippers-select"
-          placeholder="Select Speed"
-          selectedVal={trucksSpeed}
-          handleSelect={handleChangeTruckSpeed}
-          suffix="X"
-          style={{ height: "45px" }}
-          options={Array(5).fill(1).map((a, i) => i + 1)}
-        />
-        <DateTimeRangeField
-          dateRange={datestartRange}
-          setDateRange={setdatestartRange}
-          minDateTime={minDateTime}
-          endTime={endTime}
-          setEndTime={setEndTime}
-        // style={{ height: '10px' }}
-
-        /> &nbsp;&nbsp;
-        <div className="flex-column mt-2">
-          <div>End Date Time:</div>
-
-          <div><b>{endTime && getDateTimeViewFormatMin(endTime)}</b></div>
+        <div className="col-md-1 col-lg-1 flex-row" style={{width: '150px'}}> 
+          <div className="flex-column mt-2">
+            <div>End Date Time</div>
+            <div><b>{endTime && getDateTimeViewFormatMin(endTime)}</b></div>
+          </div>
         </div>
-        <Button label="Go" style={{ height: "40px", margin: "12px" }} loading={open} onClick={getDetails} />
-        {/* <Button className="button-class" style={{ margin: "12px" }} variant="contained" onClick={getDetails}> Go </Button> */}
+        <div className="col-md-1 col-lg-1 mt-2" >
+          <Button label="Go" style={{ height: "40px" }} loading={open} onClick={getDetails} />
+        </div>
       </div>
-      {/* {showMap && <TipperMap key={mapKey} locations={locations} data={tippersMovement} initialx={tippersMovement[0]?.lat || cordinates.x} initialy={tippersMovement[0]?.lng || cordinates.y} timerShow={timerShow} time={renderedStreamDuration} open={open}  />} */}
       {showMap && <TipperMap key={mapKey} locations={locations} data={tippersMovement} initialx={tippersMovement[0]?.lat || cordinates.x} initialy={tippersMovement[0]?.lng || cordinates.y} timerShow={timerShow} time={renderedStreamDuration} open={open} setTruckCoordinates={setTruckCoordinates} truckCoordinates={truckCoordinates} />}
       {open && (
         <Backdrop
@@ -302,8 +332,8 @@ const TipperView = () => {
         // onClick={handleClose}
         >
           <CircularProgress size={80} color="inherit" />
-        </Backdrop>
-      )}
+        </Backdrop>)}
+      {/* rest of your code */}
     </div>
   </>
 }

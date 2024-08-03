@@ -352,7 +352,7 @@ function Sidebar({ isExpanded, setIsExpanded, handleLinkClick }) {
               >
                 <MenuItem className="menu-item" style={active === 'Replay Analysis' ? { backgroundColor: "#E6ECEF" } : { backgroundColor: "#ffffff" }}>
                   <Link
-                    to=""
+                    to="/TipperView"
                     onClick={() => handleLinkClickName('Replay Analysis')}
                     style={{ textDecoration: "none", color: "white" }}
                   >
@@ -361,7 +361,7 @@ function Sidebar({ isExpanded, setIsExpanded, handleLinkClick }) {
                 </MenuItem>
                 <MenuItem className="menu-item" style={active === 'Activity Analysis' ? { backgroundColor: "#E6ECEF" } : { backgroundColor: "#ffffff" }}>
                   <Link
-                    to="/sveltCharts"
+                    to="/SveltaWithDropDown" //sveltCharts
                     onClick={() => handleLinkClickName('Activity Analysis')}
                     style={{ textDecoration: "none", color: "white" }}
                   >

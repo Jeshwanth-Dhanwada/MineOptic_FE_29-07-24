@@ -98,8 +98,8 @@ const Timer = ({
   }, [initialDate])
 
   return (
-    <div className="container">
-      <div className="timer-controller-wrapper mt-1">
+    // <div className="container-fluid">
+      <div className="mt-1">
           <Tooltip title="Previous">
             <IconButton disabled={!(!isControlDisable && !isPlaying)}>
               <SkipPreviousIcon onClick={prevHandler} style={{ fontSize: 28 }} />
@@ -138,7 +138,7 @@ const Timer = ({
         {/* <div className="timer-display "><b>{timerShow && getDateTimeViewFormat(renderedStreamDuration)}</b></div> */}
 
       </div>
-    </div>
+    // </div>
   );
 };
 

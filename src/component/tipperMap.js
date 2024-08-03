@@ -32,8 +32,9 @@ const TipperMap = ({ data = [], initialx, initialy, zoom, locations, timerShow, 
     setTruckCoordinates((prevCoordinates) => [...prevCoordinates, newCoordinates]);
   };
 
+
   return (
-    <div className="w-full" style={{ width: 100 + "vw", height: 89 + "vh", marginTop: 70 + "px", overflowY: "hidden", scrollable: false, }}>
+    <div className="w-full" style={{ width: 100 + "vw", height: 89 + "vh", marginTop: 72 + "px", overflowY: "hidden", scrollable: false, }}>
 
       <MapContainer
         style={{ width: 100 + "%", height: 100 + "%" }}
@@ -57,7 +58,7 @@ const TipperMap = ({ data = [], initialx, initialy, zoom, locations, timerShow, 
             {pos.location_name}
           </Tooltip>
         </Polygon>)}
-        <FullscreenControl position="bottomright" style={{ right: 5 }} />
+        <FullscreenControl position="bottomright" style={{ right: 5, marginbottom: 5}} />
         {/* <ZoomControl position="bottomright" /> */}
         <FeatureGroup>
           {data?.map((points) => <DraggableMarker key={points.tipper_id} points={points} updateTruckCoordinates={updateTruckCoordinates} />)}
