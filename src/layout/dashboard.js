@@ -39,6 +39,8 @@ import GantCharts from '../component/gantCharts';
 import SveltaTree from '../component/sveltCharts';
 import SveltaWithDropDown from '../component/svelteChartsdropdown';
 import SveltaWithDropDownExa from '../component/svelta';
+import TripSummary from '../component/tripSummary';
+import TripDetails from '../component/tripDetails';
 
 // import showNodes
 
@@ -313,6 +315,8 @@ function DashboardLayout(props) {
           <Route path="/sveltCharts" element={<SveltaTree/>} />
           <Route path="/SveltaWithDropDown" element={<SveltaWithDropDown/>} />
           <Route path="/SveltaWithDropDownExa" element={<SveltaWithDropDownExa/>} />
+          <Route path="/TripSummary" element={<TripSummary/>} />
+          <Route path="/TripDetails" element={<TripDetails/>} />
         </Route>
         </Routes>
         </div>

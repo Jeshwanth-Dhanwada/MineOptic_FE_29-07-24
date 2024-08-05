@@ -358,3 +358,17 @@ export const getMaterialTypeMaster = () => {
             });
     })
 }
+
+export const getTripDetails = () => {
+    const apiUrl = `${BASE_URL}/api/tripdetails`;
+    return new Promise((resolve, reject) => {
+        axios.get(apiUrl)
+            .then((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+                reject()
+            });
+    })
+}
