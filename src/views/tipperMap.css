@@ -1,0 +1,35 @@
+.action-container {
+    /* width: 500px; */
+    display: flex;
+    padding: 2px;
+}
+
+.tippers-select {
+    width: 80px;
+    background-color: white;
+    color: black;
+    height: 45px;
+    padding-top: 0px;
+}
+
+.maps-screen {
+    position: 'fixed';
+    top: 2;
+    left: 0;
+    width: '100%';
+    z-index: 1 ;
+    overflow: hidden;
+}
+
+.button-class {
+    height: 40px;
+    width: 50px;
+    margin-top: 10px; 
+    font-size: medium;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
