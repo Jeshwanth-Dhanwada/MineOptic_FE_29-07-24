@@ -22,7 +22,6 @@ const useTimer = (initialDate) => {
   const updateTimer = useCallback(() => {
     timerRef.current = setInterval(() => {
       setIndex((prev) => prev + 1)
-      console.log("play index:",index)
     }, timerSpeed)
     return () => clearTimer();
   }, [isStartTimer]);

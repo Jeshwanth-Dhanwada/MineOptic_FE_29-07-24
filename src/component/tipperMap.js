@@ -60,10 +60,10 @@ const TipperMap = ({ data = [], initialx, initialy, zoom, locations, timerShow, 
         </Polygon>)}
         <FullscreenControl position="bottomright" style={{ right: 5, marginbottom: 5}} />
         {/* <ZoomControl position="bottomright" /> */}
-        <FeatureGroup>
+        {/* <FeatureGroup> */}
           {data?.map((points) => <DraggableMarker key={points.tipper_id} points={points} updateTruckCoordinates={updateTruckCoordinates} />)}
+        {/* </FeatureGroup> */}
           {data?.map((points) => points.type === "tipper"?<Polyline key={points.tipper_id} positions={truckCoordinates} color="red" /> :"")}
-        </FeatureGroup>
       </MapContainer>
       {/* <BoxesLoader
         boxColor={"#6366F1"}

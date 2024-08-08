@@ -41,8 +41,23 @@ code {
 .toolbox {
   height: 100vh;
   overflow-y: auto;
-
   a {
     cursor: pointer;
   }
+}
+
+.rotate-0 {
+  transform: rotate(90deg);
+}
+
+.rotate-33 {
+  transform: rotate(180deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
 }

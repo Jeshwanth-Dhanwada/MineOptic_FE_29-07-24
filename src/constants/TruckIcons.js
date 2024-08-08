@@ -1,18 +1,18 @@
 
 // import truckSvg from "./assets/images/Truck1.png"
 // import excavatorkSvg from "./assets/images/Excavator.png"
-import truckSvg from "../assets/images/Truck1.png"
+import truckSvg from "../assets/images/truck1.svg"
 import excavatorSvg from "../assets/images/Excavator.png"
-import IdleEmpty from "../assets/images/TruckIdleEmpty.png"
-import IdleLoad from "../assets/images/TruckIdleLoad.png"
-import Loading from "../assets/images/TruckLoading.png"
-import Spotting from "../assets/images/TruckSpotting.png"
-import StopEmpty from "../assets/images/TruckStopEmpty.png"
-import StopLoad from "../assets/images/TruckStopLoad.png"
-import TravelEmpty from "../assets/images/TruckTravelEmpty.png"
-import TravelLoad from "../assets/images/TruckTravelLoad.png"
-import Unloading from "../assets/images/TruckUnloading.png"
-import WaitingForLoad from "../assets/images/TruckWaitingForLoad.png"
+import IdleEmpty from "../assets/images/TruckIdleEmpty.svg"
+import IdleLoad from "../assets/images/TruckIdleLoad.svg"
+import Loading from "../assets/images/TruckLoading.svg"
+import Spotting from "../assets/images/TruckSpotting.svg"
+import StopEmpty from "../assets/images/TruckStopEmpty.svg"
+import StopLoad from "../assets/images/TruckStopLoad.svg"
+import TravelEmpty from "../assets/images/TruckTravelEmpty.svg"
+import TravelLoad from "../assets/images/TruckTravelLoad.svg"
+import Unloading from "../assets/images/TruckUnloading.svg"
+import WaitingForLoad from "../assets/images/TruckWaitingForLoad.svg"
 
 export const ICON_TYPES = {
     TRUCK: truckSvg,
@@ -31,5 +31,6 @@ export const TRUCK_STATUS = {
     TL: TravelLoad,
     UL: Unloading,
     SL: StopLoad,
+    SS:Spotting
     
 }
