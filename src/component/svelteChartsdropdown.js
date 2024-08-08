@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants/apiConstants.js";
 import { v4 as uuidv4 } from "uuid";
-import { FaSistrix } from "react-icons/fa";
+import { FaCheck, FaSistrix } from "react-icons/fa";
 import { RiFilter3Fill } from "react-icons/ri";
 import { IoCloseCircle } from "react-icons/io5";
 import { AiFillCloseSquare } from "react-icons/ai";
@@ -33,7 +33,26 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
-import Button from "@mui/material/Button";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+import { Backdrop, Card, Slider } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -51,7 +70,11 @@ const SveltaWithDropDown = () => {
   const [Nodesdata, setNodesdata] = useState([]);
   const [locationdata, setLocationdata] = useState([]);
   const [FilteredTruckHistory, setFilteredTruckHistory] = useState([]);
+  const [FilteredExcavatorHistory, setFilteredExcavatorHistory] = useState([]);
   const ganttRef = useRef(null); // Reference to store the Gantt chart instance
+  const ganttRef1 = useRef(null); // Reference to store the Gantt chart instance
+  const [OpenLoader, setOpenLoader] = useState(false)
+  const [OpenLoader1, setOpenLoader1] = useState(false)
 
   useEffect(() => {
     axios
@@ -165,8 +188,8 @@ const SveltaWithDropDown = () => {
     timeRanges,
     columnOffset: 15,
     magnetOffset: 15,
-    rowHeight: 50,
-    rowPadding: 10,
+    rowHeight: 35,
+    rowPadding: 5,
     fitWidth: true,
     minWidth: 1000,
     from: currentStart,
@@ -302,6 +325,18 @@ const SveltaWithDropDown = () => {
   const [minTime, setMinTime] = useState([]);
   const [mindate, setMinDate] = useState([]);
   const [maxdate, setMaxDate] = useState([]);
+
+  const [Mergeddata,setMergeddata]= useState([])
+  const [SortedData,setSortedData]= useState([])
+
+  const [exadata1, setExaData1] = useState([]);
+  const [exadata2, setExaData2] = useState([]);
+
+  const [examaxTime, setExaMaxTime] = useState([]);
+  const [examinTime, setExaMinTime] = useState([]);
+  const [examindate, setExaMinDate] = useState([]);
+  const [examaxdate, setExaMaxDate] = useState([]);
+
   const [minFilteringdate, setMinFilteringDate] = useState([]);
   const [maxFilteringdate, setMaxFilteringDate] = useState([]);
 
@@ -341,7 +376,7 @@ const SveltaWithDropDown = () => {
           axios.get(`${BASE_URL}/api/excavatorhistory`),
         ]);
         console.log(Excavatorhistory.data,"Excavatorhistory")
-
+        
         TipperStateHistory.data.sort((a, b) => {
           if (a.tipper_id < b.tipper_id) return -1;
           if (a.tipper_id > b.tipper_id) return 1;
@@ -411,7 +446,6 @@ const SveltaWithDropDown = () => {
         setMaxFilteringDate(datetofilter1);
 
         const uniqueAgentIDs = new Set();
-
         const rowsData = TipperStateHistory.data
           .filter((data) => {
             if (uniqueAgentIDs.has(data.tipper_id)) return false;
@@ -421,6 +455,7 @@ const SveltaWithDropDown = () => {
           .map((data1) => ({
             id: data1.tipper_id,
             label: data1.tipper_id,
+            enableDragging: true
           }));
 
         const uniqueShovels = new Set();
@@ -432,11 +467,11 @@ const SveltaWithDropDown = () => {
         })
         .map((data1) => ({
           id: data1.excavator_id,
+          enableDragging: true
         }));
         console.log(shoveldata,"shoveldata")
         setData1(rowsData);
         setData3(shoveldata);
-
         // updateGanttChart(rowsData, parsedData2, checkedItems);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -456,9 +491,12 @@ const SveltaWithDropDown = () => {
       maxTime,
       mindate,
       maxdate,
-      FilteredTruckHistory
+      FilteredTruckHistory,
+      exadata1,
+      exadata2,
+      SortedData
     );
-  }, [checkedItems, data1, data2, checkedJobItems, minTime, maxTime, mindate, maxdate,FilteredTruckHistory]);
+  }, [checkedItems, data1, data2, checkedJobItems, minTime, maxTime, mindate, maxdate, FilteredTruckHistory, exadata1, exadata2, SortedData]);
   const updateGanttChart = (
     rowsData,
     parsedData2,
@@ -467,9 +505,10 @@ const SveltaWithDropDown = () => {
     minTime,
     maxTime,
     mindate,
-    maxdate
+    maxdate,
+    exadata1,
+    exadata2
   ) => {
-    console.log(FilteredTruckHistory,"check")
     if (rowsData?.length > 0) {
       // if (rowsData?.length > 0 && parsedData2?.length > 0) {
       const uniqueData = [...new Set(checkedItems)];
@@ -485,9 +524,11 @@ const SveltaWithDropDown = () => {
       ) {
         let allFilteredTasks = [];
         let filteredRowsdata = [];
+        let filteredExaRowsdata = [];
+        let allFilteredExaTasks = [];
 
         // Filtering Tasks to show in the charts --------
-
+        setOpenLoader1(true)
         uniqueData.forEach((uniquItem) => {
           const filteredData = parsedData2.filter(
             (item) => item.tipper_id == uniquItem
@@ -496,7 +537,7 @@ const SveltaWithDropDown = () => {
           const sortedData = filteredData.sort(
             (a, b) => new Date(a.state_date) - new Date(b.state_date)
           );
-
+          
           const tasksData = FilteredTruckHistory
             .map((data, index, arr) => {
               try {
@@ -571,6 +612,7 @@ const SveltaWithDropDown = () => {
                   id: generateUniqueId(),
                   resourceId: data.tipper_id,
                   label: " ",
+                  data: "tipper",
                   from: createDateTime(STdate, ST),
                   to: createDateTime(ETdate, ET),
                   classes: taskClass,
@@ -596,6 +638,89 @@ const SveltaWithDropDown = () => {
 
           allFilteredTasks = allFilteredTasks.concat(tasksData);
         });
+        console.log(FilteredExcavatorHistory)
+        const tasksDataa = FilteredExcavatorHistory
+              .map((data, index, arr) => {
+                try {
+                  const date = new Date(data.state_date);
+                  const options = {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  };
+                  const dateOptions = {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  };
+                  const ST = date.toLocaleTimeString([], options);
+                  const STdate = date
+                    .toLocaleDateString([], dateOptions)
+                    .replace(/\//g, "-");
+  
+                  // Find the end time based on the next task's start time
+                  const nextData = arr[index + 1];
+                  const ET = nextData
+                    ? new Date(nextData.state_date).toLocaleTimeString(
+                        [],
+                        options
+                      )
+                    : "";
+  
+                  const ETdate = nextData
+                    ? new Date(nextData.state_date)
+                        .toLocaleDateString([], dateOptions)
+                        .replace(/\//g, "-")
+                    : maxdate;
+  
+                  let taskClass = "";
+                  switch (data.new_state) {
+                    case "0":
+                      taskClass = "IdleEmpty";
+                      break;
+                    case "1":
+                      taskClass = "Working";
+                      break;
+                    case "-1":
+                      taskClass = "StopEmpty";
+                      break;
+                    default:
+                      taskClass = "";
+                  }
+  
+                  const task = {
+                    id: generateUniqueId(),
+                    resourceId: data.excavator_id,
+                    label: " ",
+                    data: "excavator",
+                    from: createDateTime(STdate, ST),
+                    to: createDateTime(ETdate, ET),
+                    classes: taskClass,
+                    enableResize: false,
+                    enableDragging: false,
+                    startTime: ST,
+                    endTime: ET,
+                    state: data.new_state,
+                    firstExcavatorId:0,
+                      // data.first_excavator_id == -1
+                      //   ? ""
+                      //   : data.first_excavator_id
+                    stateDistance: 0,
+                    location_id:0,
+                  };
+                  return task;
+                } catch (error) {
+                  console.error("Error processing task data:", data, error);
+                  return null;
+                }
+              })
+              .filter((task) => task !== null);
+  
+            allFilteredExaTasks = allFilteredExaTasks.concat(tasksDataa);
+          
+        const MergeExadata = allFilteredTasks.concat(allFilteredExaTasks)
+
+        console.log(MergeExadata,"merge")
 
          // get unique lables(truck ids) ---------------
 
@@ -616,24 +741,57 @@ const SveltaWithDropDown = () => {
           .map((data1) => ({
             id: data1.tipper_id,
             label: data1.tipper_id,
+            enableDragging: true
           }));
 
-        uniqueData.forEach((item) => {
+          const a = ExcavatorId.map((item)=>item.id)
+          const b = TipperId.map((item)=>item.id)
+          const uniqueExaIDs = new Set();
+          const rowsDataaa = FilteredExcavatorHistory
+            .filter((data) => {
+              if (uniqueExaIDs.has(data.excavator_id)) return false;
+              uniqueExaIDs.add(data.excavator_id);
+              return true;
+            })
+            .map((data1) => ({
+              id: data1.excavator_id,
+              label: data1.excavator_id,
+              enableDragging: true
+            }));
+            
+        a.forEach((item) => {
+          const filteredrows = rowsDataaa.filter((item1) => item1.id == item);
+          filteredExaRowsdata.push(...filteredrows);
+        });
+
+        b.forEach((item) => {
           const filteredrows = rowsDataa.filter((item1) => item1.id == item);
           filteredRowsdata.push(...filteredrows);
         });
-       
+        
+        // Using concat method
+        let mergedArray2
+        if(SortedData.length > 0){
+          mergedArray2 = SortedData
+          setMergeddata(mergedArray2)
+        }
+        else{
+          mergedArray2 = filteredRowsdata.concat(filteredExaRowsdata);
+          setMergeddata(mergedArray2)
+        }
+      setOpenLoader1(false)
         const { rows, tasks, from, to, ...restOptions } = options;
         ganttRef.current = new SvelteGantt({
           target: document.getElementById("example-gantt"),
           props: {
             ...restOptions,
-            rows: filteredRowsdata,
-            tasks: allFilteredTasks,
+            rows: mergedArray2,
+            tasks: MergeExadata,
             from: createDateTime(mindate, minTime),
             to: createDateTime(maxdate, maxTime),
           },
         });
+        
       } else if (!uniqueData?.length) {
         const tasksData = parsedData2
           .filter((item) => item?.id !== null)
@@ -690,8 +848,339 @@ const SveltaWithDropDown = () => {
           props: { ...restOptions, rows: rowsData, tasks: tasksData },
         });
       }
+      
     }
   };
+
+
+  // Excavator Gantt charts
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // Fetch data from the API
+          const [ExcavatorStatehistory] = await Promise.all([
+            axios.get(`${BASE_URL}/api/ExcavatorStatehistory`),
+          ]);
+
+          ExcavatorStatehistory.data.sort((a, b) => {
+            if (a.excavator_id < b.excavator_id) return -1;
+            if (a.excavator_id > b.excavator_id) return 1;
+            return 0;
+          });
+
+          setExaData2(ExcavatorStatehistory.data);
+
+          const startT = ExcavatorStatehistory.data.map(
+            (item) => new Date(item.state_date)
+          );
+
+          // Find the minimum date
+          const minDate = new Date(
+            Math.min(...startT.map((date) => date.getTime()))
+          );
+
+          const maxDate = new Date(
+            Math.max(...startT.map((date) => date.getTime()))
+          );
+          // Format the date and time
+          const date = minDate.toLocaleDateString("en-IN").replace(/\//g, "-"); // 'en-IN' for India Standard Time format
+          const date1 = maxDate.toLocaleDateString("en-IN").replace(/\//g, "-"); // 'en-IN' for India Standard Time format
+
+          const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+          const datetofilter = minDate
+            .toLocaleDateString("en-CA", options)
+            .replace(/\//g, "-");
+          const datetofilter1 = maxDate
+            .toLocaleDateString("en-CA", options)
+            .replace(/\//g, "-");
+
+          const Mintime = minDate.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false, // Set to true if you want 12-hour format
+          });
+          const Maxtime = maxDate.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false, // Set to true if you want 12-hour format
+          });
+
+          if (filtereddate) {
+            console.log("Filtered data");
+            setExaMinDate(filtereddate);
+            setExaMaxDate(filtereddate);
+            setExaMaxTime("24:00");
+            setExaMinTime("01:00");
+          } else {
+            console.log("Filtered No data");
+            setExaMinDate(date);
+            setExaMaxDate(date1);
+            setExaMinTime(Mintime);
+            setExaMaxTime(Maxtime);
+            setfiltereddate("");
+          }
+
+          setMinFilteringDate(datetofilter);
+          setMaxFilteringDate(datetofilter1);
+
+          const uniqueAgentIDs = new Set();
+
+          const rowsData = ExcavatorStatehistory.data
+            .filter((data) => {
+              if (uniqueAgentIDs.has(data.excavator_id)) return false;
+              uniqueAgentIDs.add(data.excavator_id);
+              return true;
+            })
+            .map((data1) => ({
+              id: data1.excavator_id,
+              label: data1.excavator_id,
+            }));
+            setExaData1(rowsData);
+
+          // updateGanttChart(rowsData, parsedData2, checkedItems);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData();
+    }, [filtereddate]);
+
+    useEffect(() => {
+      updateExaGanttChart(
+        exadata1,
+        exadata2,
+        checkedItems,
+        checkedJobItems,
+        examinTime,
+        examaxTime,
+        examindate,
+        examaxdate,
+        FilteredExcavatorHistory
+      );
+    }, [checkedItems, exadata1, exadata2, checkedJobItems, examinTime, examaxTime, examindate, examaxdate, FilteredExcavatorHistory]);
+  
+    const updateExaGanttChart = (
+      rowsData,
+      parsedData2,
+      checkedItems,
+      checkedJobItems,
+      minTime,
+      maxTime,
+      mindate,
+      maxdate,
+      FilteredExcavatorHistory
+    ) => {
+      console.log(FilteredExcavatorHistory,"search")
+      if (rowsData?.length > 0) {
+        // if (rowsData?.length > 0 && parsedData2?.length > 0) {
+        const uniqueData = [...new Set(checkedItems)];
+        const uniqueJobData = [...new Set(checkedJobItems)];
+        if (ganttRef1 && ganttRef1.current) {
+          // Destroy the existing Gantt instance before creating a new one
+          ganttRef1.current.$destroy();
+        }
+  
+        if (
+          uniqueData.length === checkedItems.size &&
+          uniqueJobData.length === checkedJobItems.size
+        ) {
+          let allFilteredExaTasks = [];
+          let filteredExaRowsdata = [];
+  
+          // Filtering Tasks to show in the charts --------
+          console.log(ExcavatorId.map((item)=>item.id),"ss")
+          const a = ExcavatorId.map((item)=>item.id)
+          console.log(uniqueData,"ss")
+          console.log(parsedData2,"ss")
+          a.forEach((uniquItem) => {
+            const filteredData = parsedData2.filter(
+              (item) => item.excavator_id == uniquItem
+            );
+            // Sort filtered data by state_date
+            const sortedData = filteredData.sort(
+              (a, b) => new Date(a.state_date) - new Date(b.state_date)
+            );
+  
+            const tasksData = FilteredExcavatorHistory
+              .map((data, index, arr) => {
+                try {
+                  const date = new Date(data.state_date);
+                  const options = {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  };
+                  const dateOptions = {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  };
+                  const ST = date.toLocaleTimeString([], options);
+                  const STdate = date
+                    .toLocaleDateString([], dateOptions)
+                    .replace(/\//g, "-");
+  
+                  // Find the end time based on the next task's start time
+                  const nextData = arr[index + 1];
+                  const ET = nextData
+                    ? new Date(nextData.state_date).toLocaleTimeString(
+                        [],
+                        options
+                      )
+                    : "";
+  
+                  const ETdate = nextData
+                    ? new Date(nextData.state_date)
+                        .toLocaleDateString([], dateOptions)
+                        .replace(/\//g, "-")
+                    : maxdate;
+  
+                  let taskClass = "";
+                  switch (data.new_state) {
+                    case "0":
+                      taskClass = "IdleEmpty";
+                      break;
+                    case "1":
+                      taskClass = "Working";
+                      break;
+                    case "-1":
+                      taskClass = "StopEmpty";
+                      break;
+                    default:
+                      taskClass = "";
+                  }
+  
+                  const task = {
+                    id: generateUniqueId(),
+                    resourceId: data.excavator_id,
+                    label: " ",
+                    from: createDateTime(STdate, ST),
+                    to: createDateTime(ETdate, ET),
+                    classes: taskClass,
+                    enableResize: false,
+                    enableDragging: false,
+                    startTime: ST,
+                    endTime: ET,
+                    state: data.new_state,
+                    firstExcavatorId:0,
+                      // data.first_excavator_id == -1
+                      //   ? ""
+                      //   : data.first_excavator_id
+                    stateDistance: 0,
+                    location_id:0,
+                  };
+                  return task;
+                } catch (error) {
+                  console.error("Error processing task data:", data, error);
+                  return null;
+                }
+              })
+              .filter((task) => task !== null);
+  
+            allFilteredExaTasks = allFilteredExaTasks.concat(tasksData);
+            console.log(allFilteredExaTasks)
+          });
+  
+           // get unique lables(truck ids) -------------
+           const rowss = FilteredExcavatorHistory.map((item)=> item.excavator_id)
+  
+           const uniqueTipperIds = [...new Set(rowss)];
+   
+           console.log(uniqueTipperIds,"search"); 
+   
+          // Filtering rows to show in the charts --------
+          const uniqueExaIDs = new Set();
+          const rowsDataa = FilteredExcavatorHistory
+            .filter((data) => {
+              if (uniqueExaIDs.has(data.excavator_id)) return false;
+              uniqueExaIDs.add(data.excavator_id);
+              return true;
+            })
+            .map((data1) => ({
+              id: data1.excavator_id,
+              label: data1.excavator_id,
+            }));
+            
+            a.forEach((item) => {
+              const filteredrows = rowsDataa.filter((item1) => item1.id == item);
+              filteredExaRowsdata.push(...filteredrows);
+            });
+            // console.log(uniqueData,"search"); 
+            console.log(rowsDataa,"search"); 
+            console.log(FilteredExcavatorHistory,"search"); 
+            console.log(filteredExaRowsdata,"search"); 
+         
+          const { rows, tasks, from, to, ...restOptions } = options;
+          ganttRef1.current = new SvelteGantt({
+            target: document.getElementById("example-gantt2"),
+            props: {
+              ...restOptions,
+              rows: filteredExaRowsdata,
+              tasks: allFilteredExaTasks,
+              from: createDateTime(mindate, minTime),
+              to: createDateTime(maxdate, maxTime),
+            },
+          });
+        } else if (!uniqueData?.length) {
+          const tasksData = parsedData2
+            .filter((item) => item?.id !== null)
+            .map((data) => {
+              try {
+                if (!data.StartTime || !data.EndTime)
+                  throw new Error("Missing StartTime or EndTime");
+  
+                const startTime = data.StartTime.split(" ")[1];
+                const endTime = data.EndTime.split(" ")[1];
+                const fromTime = createDateTime("16-04-2024", startTime);
+                const toTime = createDateTime("16-04-2024", endTime);
+  
+                if (!fromTime || !toTime) throw new Error("Invalid time format");
+  
+                let taskClass = "";
+                switch (data.OperationType) {
+                  case "update":
+                    taskClass = "task-update";
+                    break;
+                  case "create":
+                    taskClass = "task-create";
+                    break;
+                  case "delete":
+                    taskClass = "task-delete";
+                    break;
+                  default:
+                    taskClass = "";
+                }
+  
+                const task = {
+                  id: generateUniqueId(),
+                  resourceId: data.AgentID,
+                  label: data.OperationType,
+                  from: fromTime,
+                  to: toTime,
+                  classes: taskClass,
+                  enableResize: false,
+                  enableDragging: false,
+                  missionId: data.MissionID,
+                };
+                return task;
+              } catch (error) {
+                console.error("Error processing task data:", data, error);
+                return null;
+              }
+            })
+            .filter((task) => task !== null);
+  
+          const { rows, tasks, ...restOptions } = options;
+  
+          ganttRef1.current = new SvelteGantt({
+            target: document.getElementById("example-gantt2"),
+            props: { ...restOptions, rows: rowsData, tasks: tasksData },
+          });
+        }
+      }
+    };
 
   useEffect(() => {
     if (selectAllChecked) {
@@ -781,6 +1270,7 @@ const SveltaWithDropDown = () => {
   };
 
   const [TipperId, setTipperId] = useState([]);
+  const [TipperIds, setTipperIds] = useState([]);
   const [ExcavatorId, setExcavatorId] = useState([]);
   const [selectedDate, setSelectedDate] = useState();
 
@@ -790,7 +1280,11 @@ const SveltaWithDropDown = () => {
       target: { value },
     } = event;
     setTipperId(typeof value === "string" ? value.split(",") : value);
+    const Tids = value.map((item)=>item.id)
+    console.log(Tids,"234")
+    setTipperIds(Tids)
   };
+
   const handleChangeExcavator = (event) => {
     const {
       target: { value },
@@ -804,90 +1298,14 @@ const SveltaWithDropDown = () => {
     console.log("Selected Date and Time:", newValue.format());
   };
 
-  // console.log(selectedDate.format(),"shoveldata")
-
-  // const HandleGoButton = () => {
-  //     if(TipperId && selectedDate){
-  //       console.log("Incoming")
-  //       console.log(TipperId)
-  //       console.log(selectedDate ? selectedDate.format() : "")
-  //       const Tipperid = TipperId.map((item)=> item.id)
-  //       console.log(Tipperid)
-  //       // const filter = data2.map((item)=> new Date(item.inserted_time))
-  //       const filter = data2.filter((item)=> new Date(item.inserted_time))
-  //                   .toLocaleString('en-US', {
-  //                     hour12: false,
-  //                     year: 'numeric',
-  //                     month: '2-digit',
-  //                     day: '2-digit',
-  //                     hour: '2-digit',
-  //                     minute: '2-digit',
-  //                     second: '2-digit'
-  //                   }).replace(/\//g, "-") >= 
-  //                     new Date(selectedDate.format())
-  //                     .toLocaleString('en-US', {
-  //                       hour12: false,
-  //                       year: 'numeric',
-  //                       month: '2-digit',
-  //                       day: '2-digit',
-  //                       hour: '2-digit',
-  //                       minute: '2-digit',
-  //                       second: '2-digit'
-  //                     }).replace(/\//g, "-")
-  //       console.log(filter)
-  //     }
-  //   }
-
-  // const HandleGoButton = () => {
-  //   if (TipperId && selectedDate) {
-  //     console.log("Incoming");
-  
-  //     // Extract Tipper IDs
-  //     const tipperIds = TipperId.map((item) => item.id);
-  //     console.log(tipperIds);
-  
-  //     // Format selected date to compare
-  //     const formattedSelectedDate = new Date(selectedDate.format())
-  //       .toLocaleString('en-US', {
-  //         hour12: false,
-  //         year: 'numeric',
-  //         month: '2-digit',
-  //         day: '2-digit',
-  //         hour: '2-digit',
-  //         minute: '2-digit',
-  //         second: '2-digit'
-  //       })
-  //       .replace(/\//g, "-");
-  
-  //     // Filter data based on the inserted_time field
-  //     const filteredData = data2.filter((item) => {
-  //       const formattedInsertedTime = new Date(item.inserted_time)
-  //         .toLocaleString('en-US', {
-  //           hour12: false,
-  //           year: 'numeric',
-  //           month: '2-digit',
-  //           day: '2-digit',
-  //           hour: '2-digit',
-  //           minute: '2-digit',
-  //           second: '2-digit'
-  //         })
-  //         .replace(/\//g, "-");
-  //       return formattedInsertedTime >= formattedSelectedDate;
-  //     });
-  
-  //     console.log(filteredData);
-  //   }
-  // };
   const HandleGoButton = () => {
-    if (TipperId && selectedDate && ExcavatorId) {
-      console.log("Incoming");
-
+    if (selectedDate && ExcavatorId && TipperId) {
       // Extract Tipper IDs
       const tipperIds = TipperId.map((item) => item.id);
       console.log(tipperIds);
 
       const excavatorIds = ExcavatorId.map((item)=> item.id);
-      console.log(excavatorIds)
+      console.log(excavatorIds,"search")
   
       // Format selected date for comparison
       const formattedSelectedDate = new Date(selectedDate.format())
@@ -923,56 +1341,183 @@ const SveltaWithDropDown = () => {
         // Return true if both conditions are met
         return isTipperIdMatch && formattedInsertedTime >= formattedSelectedDate;
       });
+
+       // Filter data based on inserted_time and ExcavatorId
+       const filterExcavatordata = exadata2.filter((item)=>{
+        const formattedInsertedTime = new Date(item.state_date)
+          .toLocaleString('en-US', {
+            hour12: false,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          })
+          .replace(/\//g, "-");
+
+          const isExcavatorIdMatch = excavatorIds.includes(item.excavator_id);
+          // Return true if both conditions are met
+        return isExcavatorIdMatch && formattedInsertedTime >= formattedSelectedDate;
+      })
   
-      console.log(filteredData);
       setFilteredTruckHistory(filteredData)
-      console.log(data2);
+      setFilteredExcavatorHistory(filterExcavatordata)
     }
   };
   
+  const [Container,setContainer] = useState(false)
+
+  const HandleSorting = () => {
+      setContainer(true)
+  }
+  const HandleSortingClose = () =>{
+    setContainer(false)
+    const a = TipperId.map((item)=> item.id)  
+    const e = ExcavatorId.map((item)=> item.id)
+    // console.log(a,"sorting")
+    // console.log(e,"sorting")
+  }
+
+  const [tipperValues, setTipperValues] = useState({});
+  const [excavatorValues, setExcavatorValues] = useState({});
+  
+
+  // const handleTipperChange = (id, value) => {
+  //   const newEntry = {
+  //     token: value,
+  //     tipper_id: id,
+  //   };
+  //   setTipperValues((prevValues) => ({
+  //     ...prevValues,
+  //     [id]: newEntry, // Store the object in the state
+  //   }));
+  // };
+
+  // const handleExcavatorChange = (id, value) => {
+
+  //   console.log(id, value, "Tipper");
+  //   const newEntry = {
+  //     token: value,
+  //     excavator_id: id,
+  //   };
+
+  //   setTipperValues((prevValues) => ({
+  //     ...prevValues,
+  //     [id]: newEntry, // Store the object in the state
+  //   }));
+  // };
+
+  // const HandleSortingTasks = () => {
+  //   console.log('Tipper Values:', tipperValues);
+  //   console.log('Tipper Values:', excavatorValues);
+
+  //   // Iterate over all entries in excavatorValues
+  //   Object.keys(excavatorValues).forEach((id) => {
+  //     const { token,excavator_id } = excavatorValues[id];
+  //     console.log(`Tipper Values`, token);
+  //     console.log(`Tipper Values`, excavator_id);
+  //   });
+  //   // Iterate over all entries in excavatorValues
+  //   Object.keys(tipperValues).forEach((id) => {
+  //     const { token, tipper_id } = tipperValues[id];
+  //     console.log(`Tipper Values`, token);
+  //     console.log(`Tipper Values`, tipper_id);
+  //   });
+    
+  // }
+
+  const handleTipperChange = (id, value) => {
+    const newEntry = {
+      token: Number(value),
+      id,
+      type: 'tipper',
+    };
+    setTipperValues((prevValues) => ({
+      ...prevValues,
+      [id]: newEntry,
+    }));
+  };
+
+  const handleExcavatorChange = (id, value) => {
+    const newEntry = {
+      token: Number(value),
+      id,
+      type: 'excavator',
+    };
+    setTipperValues((prevValues) => ({
+      ...prevValues,
+      [id]: newEntry,
+    }));
+  };
+
+  const HandleSortingTasks = () => {
+    // Convert combinedValues object into an array
+    const sorted = Object.values(tipperValues).sort((a, b) => a.token - b.token);
+    // Now you can use sorted data as needed
+    // Find matching data from Mergeddata
+    const matched = sorted.map(item => {
+      const match = Mergeddata.find(data => data.id === item.id);
+      return match ? match : null;
+    }).filter(Boolean); // Remove null values if no match found
+    setSortedData(matched);
+    setContainer(false)
+  };
+
+  console.log(tooltipdata,"tooltipdata")
   return (
     <div>
       {/* GANTT CONTAINER */}
-      <div className="row">
-        <div style={{ display: "flex" }}>
-          <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Tippers</InputLabel>
+      <div className="row mt-2">
+        <div style={{ display: "flex"}}>
+          <FormControl sx={{ m: 1, width: 200}}>
+            <InputLabel id="demo-multiple-checkbox-label" style={{marginTop:'-7px',fontSize:'15px'}}>Tippers</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
               value={TipperId}
+              style={{height:"35px"}}
               // value={personName.map((item)=>item.id)}
               onChange={handleChange}
               input={<OutlinedInput label="Tippers" />}
-              renderValue={(selected) => selected.join(", ")}
+              renderValue={(selected) =>
+                selected.map((item) => item.id).join(", ")
+              }
               MenuProps={MenuProps}
             >
               {data1.map((name) => (
                 <MenuItem key={name} value={name}>
-                  <Checkbox checked={TipperId.indexOf(name) > -1}/>
+                  {/* <Checkbox checked={TipperId.indexOf(name) > -1}/>
+                  <ListItemText primary={name.id} /> */}
+                  <Checkbox checked={TipperId.some((tipper) => tipper.id === name.id)} />
                   <ListItemText primary={name.id} />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          &nbsp;
-          <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Excavators</InputLabel>
+          <FormControl sx={{ m: 1, width: 200 }}>
+            <InputLabel id="demo-multiple-checkbox-label" style={{marginTop:'-7px',fontSize:'15px'}}>Excavators</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
               value={ExcavatorId}
-              // value={personName.map((item)=>item.id)}
+              // sx={{height:"35px"}}
+              sx={{ maxHeight: 35,display: 'flex', 
+                alignItems: 'center' }}
               onChange={handleChangeExcavator}
               input={<OutlinedInput label="Excavators" />}
-              renderValue={(selected) => selected.join(", ")}
+              renderValue={(selected) =>
+                selected.map((item) => item.id).join(", ")
+              }
               MenuProps={MenuProps}
             >
               {data3.map((name) => (
                 <MenuItem key={name} value={name}>
-                  <Checkbox checked={ExcavatorId.indexOf(name) > -1} />
+                  {/* <Checkbox checked={ExcavatorId.indexOf(name) > -1} />
+                  <ListItemText primary={name.id} /> */}
+                  <Checkbox checked={ExcavatorId.some((excavator) => excavator.id === name.id)} />
                   <ListItemText primary={name.id} />
                 </MenuItem>
               ))}
@@ -982,8 +1527,9 @@ const SveltaWithDropDown = () => {
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             className="mt-0 mb-2"
+            
           >
-            <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
+            <DemoContainer components={["DateTimePicker", "DateTimePicker"]} style={{ height: '200px' }}>
               <DateTimePicker
                 label="Start DateTime"
                 value={selectedDate}
@@ -993,16 +1539,27 @@ const SveltaWithDropDown = () => {
                   minutes: renderTimeViewClock,
                   seconds: renderTimeViewClock,
                 }}
+                style={{ height: '20px' }}
               />
             </DemoContainer>
           </LocalizationProvider>
           &nbsp;
-          <Button className="mt-2 mb-2" variant="contained" onClick={HandleGoButton}>
+          {TipperId && ExcavatorId && selectedDate ?
+          <Button sx={{height:'35px'}} className="mt-2 mb-2" variant="contained" onClick={HandleGoButton}>
+            Go
+          </Button> :
+          <Button sx={{height:'35px'}} className="mt-2 mb-2" variant="contained" disabled onClick={HandleGoButton}>
             Go
           </Button>
+          }&nbsp;&nbsp;
+          <Button sx={{height:'35px',textTransform: 'none' }} className="mt-2 mb-2" variant="contained" onClick={HandleSorting}>
+            Sorting
+          </Button> 
         </div>
       </div>
+      
       <div id="example-gantt"></div>
+      <div id="example-gantt2"></div>
       {tooltipdata && (
         <div
           style={{
@@ -1016,9 +1573,19 @@ const SveltaWithDropDown = () => {
           }}
         >
           <ul class="list-group list-group-item-secondary">
-            <li class="list-group-item" style={{ height: "35px" }}>
-              Truck ID:&nbsp;{tooltipdata.resourceId}
-            </li>
+              {tooltipdata.data === "tipper" && 
+                <li class="list-group-item" style={{ height: "35px" }}>
+                   Truck ID:
+                &nbsp;{tooltipdata.resourceId}
+              </li>
+              }
+              {tooltipdata.data === "excavator" && 
+                <li class="list-group-item" style={{ height: "35px" }}>
+                   Excavator ID:
+                &nbsp;{tooltipdata.resourceId}
+              </li>
+              }
+             
             <li class="list-group-item" style={{ height: "35px" }}>
               Start Time:&nbsp;{tooltipdata.startTime}
             </li>
@@ -1028,12 +1595,14 @@ const SveltaWithDropDown = () => {
             <li class="list-group-item" style={{ height: "35px" }}>
               State:&nbsp;{tooltipdata.state}
             </li>
+            {tooltipdata.data === "tipper" && 
             <li class="list-group-item" style={{ height: "35px" }}>
               First Excavator ID:&nbsp;{tooltipdata.firstExcavatorId}
-            </li>
+            </li>}
+            {tooltipdata.data === "tipper" && 
             <li class="list-group-item" style={{ height: "35px" }}>
               Location:&nbsp;{getLocationName(tooltipdata.location_id)}
-            </li>
+            </li>}
           </ul>
         </div>
       )}
@@ -1164,6 +1733,70 @@ const SveltaWithDropDown = () => {
           </div>
         </div>
       )}
+      {Container && (
+        <div>
+          <Modal
+            open={Container}
+            onClose={HandleSortingClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <AiFillCloseSquare onClick={HandleSortingClose} style={{color:'red',position:'absolute',right:'10px',top:'-10xp',fontSize:'x-large'}}/>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                <div className="container ">
+                {TipperId.map((item)=>(
+                  <div className="row mt-2">
+                    {/* <div className="col-2">
+                     <input type="image" src="./Truck1.png" alt="img" width={100} height={100}/>
+                    </div> */}
+                    <div className="col-3 d-flex">
+                    {item.id}
+                    </div>
+                    <div className="col-2">
+                    <input 
+                      type="number"
+                      onChange={(e) => handleTipperChange(item.id, e.target.value)}
+                    />
+                    </div>
+                  </div>))}
+                {ExcavatorId.map((item)=>(
+                  <div className="row mt-2">
+                    {/* <div className="col-3">
+                      <input type="image" src="./Excavator.png" alt="img"  width={50} height={50}/>
+                    </div> */}
+                    <div className="col-3">
+                    {item.id}
+                    </div>
+                    <div className="col-2">
+                    <input 
+                      type="number"
+                      onChange={(e) => handleExcavatorChange(item.id, e.target.value)}
+                    />
+                    </div>
+                  </div>))}
+                  &nbsp;
+                </div>
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <div className="btn btn-success" onClick={HandleSortingTasks}>
+                  <FaCheck/>
+                </div>
+              </Typography>
+            </Box>
+          </Modal>
+        </div>
+      )}
+      {OpenLoader1 && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={OpenLoader1}
+          // onClick={handleClose}
+        >
+          <CircularProgress size={80} color="inherit" />
+        </Backdrop>
+        )}
+      
       {/* <div
                 style={{
                   position: "absolute",

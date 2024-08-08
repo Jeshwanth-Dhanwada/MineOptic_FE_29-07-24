@@ -166,10 +166,16 @@ function DashboardLayout(props) {
   // const HandleMultipleJobsToRoutes = (multipleJobs) => {
   //   console.log(multipleJobs,)
   // }
+
+  const [sidebarContainer,setsidebarContainer] = useState()
+  const HandlesidebarContainer = (item) =>{
+    console.log(item,"sidebar")
+    setsidebarContainer(!sidebarContainer)
+  }
   return (
     <Router>
       {auth?.accessToken && (
-      <CommonSideBar isExpanded={isSideBarExpanded} setIsExpanded={setIsExpanded} handleLinkClick={handleLinkClick} />
+      <CommonSideBar isExpanded={isSideBarExpanded} setIsExpanded={setIsExpanded} handleLinkClick={handleLinkClick} handlesidebarCont={HandlesidebarContainer}/>
       )}
       {auth?.accessToken && (
       <AppBarContainer class="sticky-top" />

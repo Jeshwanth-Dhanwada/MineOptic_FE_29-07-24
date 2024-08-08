@@ -68,6 +68,10 @@ import RightSlider from "../layout/RightSlider.js";
 import FGmapping from "./FGMapping.js";
 import { BsPlusLg } from "react-icons/bs";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
+import { Menu, MenuItem } from "react-pro-sidebar";
+
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 let directionOn = "";
 
 const connectionLineStyle = { stroke: "black" };
@@ -208,7 +212,6 @@ const ShowRoutes = ({
     setEdges(updatedEdges);
     setNodes(updatedNodes);
   }, [edgeData, nodeData])
-
 
   useEffect(() => {
     const NodeImages = nodes.map((item)=>item.nodeImage)

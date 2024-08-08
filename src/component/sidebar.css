@@ -147,6 +147,7 @@
 
     table tbody tr td{
         font-size: 11px;
+        height: 10px;
     }
 
     *{
@@ -251,3 +252,9 @@
       #tablerefresh{
         height: 300px;
       }
+
+      /* #sidebarcomponent{
+        display: inline-flex;
+      } */
+
+      
