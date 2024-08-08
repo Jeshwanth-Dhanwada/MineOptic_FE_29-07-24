@@ -21,3 +21,43 @@ code {
   margin: 5px 10px;
   cursor: pointer;
 }
+
+#map {
+  height: 100vh;
+}
+
+.map {
+  height: 100vh;
+}
+
+.home {
+  position: relative;
+}
+
+.highlight {
+  background: #e9ffe3;
+}
+
+.toolbox {
+  height: 100vh;
+  overflow-y: auto;
+  a {
+    cursor: pointer;
+  }
+}
+
+.rotate-0 {
+  transform: rotate(90deg);
+}
+
+.rotate-33 {
+  transform: rotate(180deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
+}
