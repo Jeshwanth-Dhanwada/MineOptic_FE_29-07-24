@@ -1,12 +1,29 @@
-.drawer-arrow-icon {
-    cursor: pointer;
+/* .drawer-arrow-icon {
     float: right;
-    margin: 2px 5px;
+    
     color: black;
-    position: fixed;
-    right: 0;
-}
-
+} */
+ #IconStyle{
+  cursor: pointer;
+  background-color: #09587C;
+  position: fixed;
+  right: 0;
+  bottom:0px;
+  width:47px;
+  color: #ffffff;
+  height:25px;
+  margin: 1px 5px;
+ }
+ #DownIconStyle{
+  cursor: pointer;
+  background-color: #09587C;
+  position: fixed;
+  right: 0;
+  width:47px;
+  color: #ffffff;
+  height:25px;
+  /* margin: 1px 5px; */
+ }
 .dashboard-container {
     width: 100%;
     position: absolute;
@@ -44,12 +61,14 @@
 
   .dashboard-right-container.partial {
     height: 100%; /* Set the initial partial height as per your requirement */
-    width:40px;
-    margin-left: '100px';
+    width:0px;
+    /* margin-left: '100px'; */
   }
   
   .dashboard-right-container.expanded {
     height: 100%; /* Set to 100% to fully expand, adjust as needed */
+    margin-top: -6px;
+
   }
   .dashboard-right-container2.partial {
     height: 100%; 
@@ -87,3 +106,4 @@
   position: relative;
   z-index: 4;
  } 
+

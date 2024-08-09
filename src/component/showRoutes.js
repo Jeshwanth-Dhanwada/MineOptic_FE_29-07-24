@@ -975,7 +975,7 @@ const ShowRoutes = ({
                     height: data.height,
                     borderRadius: data.borderRadius,
                     display: data.borderRadius ? 'flex' : '',
-                    alignItems: data.nodeImage == null ? 'center' : "",
+                    alignItems: data.nodeImage === "" ? 'center' : "",
                     justifyContent: 'center',
                   },
                 });
@@ -1953,8 +1953,8 @@ if (parentNode) {
           iconId: empData.jobId.toString(),
           style: {
             zIndex: 1001,
-            width: "10",
-            height: "10",
+            width: "20",
+            height: "20",
             background: "",
             color: "",
             borderColor: "",
@@ -1999,8 +1999,8 @@ if (parentNode) {
           iconId: empData.deviceId.toString(),
           style: {
             zIndex: 1001,
-            width: "10",
-            height: "10",
+            width: "20",
+            height: "20",
             background: "",
             color: "",
             borderColor: "",
@@ -2766,11 +2766,6 @@ if (parentNode) {
                     style={{ position: 'fixed', top: '38px' }} 
                     // className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
                     className={`dashboard-right-container sticky-top ${active === 'FG Mapping' ? (expanded ? 'expanded' : 'partial') : ''}`} >
-
-                  {/* {isExpandedFull ? 
-                  <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull}/>
-                  : ''} */}
-                  {/* <KeyboardDoubleArrowRightIcon style={{cursor:'pointer'}} /> */}
                   {expanded ? (
                     <div className="pt-2" onClick={handleExpandToggle} >
                       <RightSlider active={active} isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon}/>
@@ -2780,7 +2775,6 @@ if (parentNode) {
                           backgroundColor: "#09587C", 
                           color: '#ffffff',
                           position: "fixed",
-                          // right:'30%',
                           right:size? size : '30%',
                           width:'25',
                           height:'47px',
@@ -2791,7 +2785,9 @@ if (parentNode) {
                     </div>
                   ) : (
                     <div className="pt-2" onClick={handleExpandToggle} >
-                      <KeyboardDoubleArrowLeftIcon style={{ cursor: 'pointer', color: '#09587C' }} onClick={handleExpandToggle} />
+                      <KeyboardDoubleArrowLeftIcon 
+                        style={{ cursor: 'pointer', color: '#09587C' }} 
+                        onClick={handleExpandToggle} />
                     </div>
                   )}
                   <div className="container-fluid">
@@ -2853,9 +2849,9 @@ if (parentNode) {
                 </div>
               )}
 
-              {selectedMenuItem === "Operations" && selectedMenuItem !== "Planning" &&
+              {/* {selectedMenuItem === "Operations" && selectedMenuItem !== "Planning" &&
                 <RightTabPanel nodefromshowRoutes={selectedNodeId} setJobIdSidetoBottom={HandleJobfromOperations} />
-              }
+              } */}
               {selectedMenuItem === "Planning" && selectedMenuItem !== "Operations" &&
                 <RightOperationTabPanel
                   sendtoPlanningtab={HandlesendtoPlanningtab}

@@ -46,7 +46,7 @@ export default memo((props) => {
         {Employees.some((item)=>item.userName == data.label) && (
           // <IconButton>
           <div className='btn btn-white' style={{border:'1px solid grey'}}>
-            <PersonIcon />
+            <PersonIcon style={{fontSize:'23px'}}/>
           </div>
         // </IconButton>
         )}

@@ -97,6 +97,7 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
 
   const [expanded, setExpanded] = useState(false);
   const handleExpandToggle = () => {
+    setIsExpandedFull(true);
     setExpanded(!expanded);
   };
 
@@ -153,44 +154,122 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
     setSize(item)
   }
   return (
-    expanded ? (
-      <div 
-      // id="dasboard-right-container"
-      // style={{ position: "fixed", top: "45px" }}
-      // className={`dashboard-right-container sticky-top ${expanded ? "expanded" : "partial"
-      //   }`}
-        >
-          <div className="pt-2" onClick={handleExpandToggle}>
-            <KeyboardDoubleArrowRightIcon
+    // expanded ? (
+
+    //   <div>
+    //       <div className="pt-2" onClick={handleExpandToggle}>
+    //         <KeyboardDoubleArrowRightIcon
+    //           style={{  
+    //             cursor: "pointer",
+    //             backgroundColor: "#09587C", 
+    //             color: '#ffffff',
+    //             position: "fixed",
+    //             right:size? size : '30%',
+    //             width:'25',
+    //             height:'47px',
+    //             top:'46px',
+    //             display: 'inline'
+    //           }} 
+    //           onClick={handleExpandToggle}
+    //         />
+    //       </div>
+    //   <Card
+    //     id="dasboard-right-container"
+    //     style={{ position: 'fixed', top: '45px' }}
+    //     className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
+    //     <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon}/>
+    //     <Box sx={{ position: "relative" }}>
+    //       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    //         <Tabs
+    //           value={value}
+    //           onChange={handleChange}
+    //           aria-label="basic tabs example"
+    //           style={{background:'#FFFFFF'}}
+    //         >
+    //           <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("")} label="Attendance" {...a11yProps(0)} />
+    //           <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("Job Mapping")} label="Job Assignment" {...a11yProps(1)} />
+    //           <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("Staff Mapping")} label="Staff Allocation" {...a11yProps(2)} />
+    //         </Tabs>
+    //       </Box>
+    //       <CustomTabPanel value={value} index={0}>
+    //         <NodeState />
+    //       </CustomTabPanel>
+    //       <CustomTabPanel value={value} index={1}>
+    //         <AllJobs Oadetails={Oadetails} />
+    //       </CustomTabPanel>
+    //       <CustomTabPanel value={value} index={2}>
+    //         <NodeAllocation />
+    //       </CustomTabPanel>
+    //     </Box>
+    //   </Card>
+    //   </div>
+    // ) : (
+    //   <div
+    //     id="dasboard-right-container"
+    //     style={{ position: "fixed", top: "45px" }}
+    //     className={`dashboard-right-container sticky-top partial`}>
+    //     <div className="pt-2" onClick={handleExpandToggle}>
+    //       <KeyboardDoubleArrowLeftIcon
+    //         style={{ cursor: "pointer", backgroundColor: "#09587C", 
+    //         color: '#ffffff',width:'25',height:'47px',position: "fixed",
+    //         right:'0%'  }}
+    //         onClick={handleExpandToggle}
+    //       />
+    //     </div>
+    //     {OpenLoader && (
+    //     <Backdrop
+    //       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    //       open={OpenLoader}
+    //       // onClick={handleClose}
+    //     >
+    //       <CircularProgress size={80} color="inherit" />
+    //     </Backdrop>
+    //     )}
+    //   </div>
+    // )
+  
+<Card
+  id="dasboard-right-container"
+  style={{ position: 'fixed', top: '45px' }}
+  className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}
+>
+  {expanded ? (
+    <div className="pt-2" onClick={handleExpandToggle}>
+      <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon} />
+      <KeyboardDoubleArrowRightIcon
               style={{  
-                        cursor: "pointer",
-                        backgroundColor: "#09587C", 
-                        color: '#ffffff',
-                        position: "fixed",
-                        right:size ? size : '30%',
-                        width:'25',height:'47px',
-                        top:'46px',
-                        display: 'inline'
-                      }}
+                cursor: "pointer",
+                backgroundColor: "#09587C", 
+                color: '#ffffff',
+                position: "fixed",
+                right:size? size : '30%',
+                width:'25',
+                height:'47px',
+                top:'46px',
+                display: 'inline'
+              }} 
               onClick={handleExpandToggle}
             />
-          </div>
-      <Card
-        id="dasboard-right-container"
-        style={{ position: 'fixed', top: '45px' }}
-        className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
-        <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon}/>
+    </div>
+  ) : (
+    <div className="pt-2" onClick={handleExpandToggle}>
+      <KeyboardDoubleArrowLeftIcon
+            style={{ cursor: "pointer", backgroundColor: "#09587C", 
+            color: '#ffffff',width:'25',height:'47px',position: "fixed",
+            right:'0%'}}
+            onClick={handleExpandToggle}
+          />
+    </div>
+  )}
+  <div className="container-fluid">
+    <div className="row">
+      <div className="col-12 m-0 p-0">
         <Box sx={{ position: "relative" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-              style={{background:'#09587c'}}
-            >
-              <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c" }} onClick={() => handlelabel("")} label="Attendance" {...a11yProps(0)} />
-              <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#FFFFFF', backgroundColor: value === 1 ? "#fc9445" : "#09587c" }} onClick={() => handlelabel("Job Mapping")} label="Job Assignment" {...a11yProps(1)} />
-              <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#FFFFFF', backgroundColor: value === 2 ? "#fc9445" : "#09587c" }} onClick={() => handlelabel("Staff Mapping")} label="Staff Allocation" {...a11yProps(2)} />
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Attendance" {...a11yProps(0)} />
+              <Tab label="Job Assignment" {...a11yProps(1)} />
+              <Tab label="Staff Allocation" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
@@ -203,32 +282,8 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
             <NodeAllocation />
           </CustomTabPanel>
         </Box>
-      </Card>
       </div>
-    ) : (
-      <div
-        id="dasboard-right-container"
-        style={{ position: "fixed", top: "45px" }}
-        className={`dashboard-right-container sticky-top partial`}>
-        <div className="pt-2" onClick={handleExpandToggle}>
-          <KeyboardDoubleArrowLeftIcon
-            style={{ cursor: "pointer", backgroundColor: "#09587C", 
-            color: '#ffffff',width:'25',height:'47px',position: "fixed",
-            right:'0%'  }}
-            onClick={handleExpandToggle}
-          />
-        </div>
-        {OpenLoader && (
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={OpenLoader}
-          // onClick={handleClose}
-        >
-          <CircularProgress size={80} color="inherit" />
-        </Backdrop>
-        )}
-      </div>
-    )
-
-  );
-}
+    </div>
+  </div>
+</Card>
+)}

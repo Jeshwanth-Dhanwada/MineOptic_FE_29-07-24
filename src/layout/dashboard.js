@@ -241,30 +241,30 @@ function DashboardLayout(props) {
               sendtoPlanningtab={sendtoPlanningtab}
             />
           )}
-          {selectedMenuItem === "Operations" && (
+          {/* {selectedMenuItem === "Operations" && (
             <BottomOperationsTabs JobfromOperations={JobfromOperations} />
-          )}
+          )} */}
           {selectedMenuItem === "Priority Job" && (
             <JobPrioritytabs JobIdtoJobPriority={JobIdtoJobPriority}  SendDatatoJobPriority={SendDatatoJobPriority} MultipleJobIdtoJobPriority={MultipleJobIdtoJobPriority}/>
           )}
-          <KeyboardDoubleArrowDownIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",display:'inline',color: '#ffffff',width:'47',position:'fixed'}} onClick={() => setIsExpandedFull(false)} />
+          <KeyboardDoubleArrowDownIcon className='drawer-arrow-icon' id='DownIconStyle' onClick={() => setIsExpandedFull(false)} />
           {/* bottom:tableHeight ? tableHeight : '270px' */}
         </Card> : 
         <div id="dasboard-footer-container" className='dashboard-container' style={{ height: footerHeight }}>
           {selectedMenuItem === "Priority Job" &&  (
-          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
+          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' id='IconStyle'  onClick={() => setIsExpandedFull(true)} />
           )}
-          {selectedMenuItem === "Operations" &&  (
-          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
-          )}
+          {/* {selectedMenuItem === "Operations" &&  (
+          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' id='IconStyle' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
+          )} */}
           {selectedMenuItem === "Planning" &&  (
-          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
+          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' id="IconStyle" onClick={() => setIsExpandedFull(true)} />
           )}
           {selectedMenuItem === "Configuration" &&  (
-          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
+          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' id='IconStyle' onClick={() => setIsExpandedFull(true)} />
           )}
           {selectedMenuItem === "Administration" &&  (
-          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' style={{ backgroundColor: "#09587C",position:'absolute',bottom:'5px',width:'47', color: '#ffffff' }} onClick={() => setIsExpandedFull(true)} />
+          <KeyboardDoubleArrowUpIcon className='drawer-arrow-icon' id='IconStyle'  onClick={() => setIsExpandedFull(true)} />
           )}
         </div>}
         <div>

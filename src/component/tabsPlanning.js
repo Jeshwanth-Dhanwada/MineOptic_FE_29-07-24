@@ -97,10 +97,10 @@ export default function BasicPlanningTabs({
               value={value}
               onChange={handleChange}
               aria-label="basic tabs example"
-              style={{background:'#09587c'}}
+              style={{background:'#FFFFFF'}}
             >
-              <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c"}} onClick={() => HandleBottomtoLeftSlide("Job Mapping")} label="Job Mapping" {...a11yProps(1)} />
-              <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#FFFFFF', backgroundColor: value === 1 ? "#fc9445" : "#09587c"}} onClick={() => HandleBottomtoLeftSlide("Staff Mapping")} label="Staff Mapping" {...a11yProps(2)} />
+              <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#FFFFFF"}} onClick={() => HandleBottomtoLeftSlide("Job Mapping")} label="Job Mapping" {...a11yProps(1)} />
+              <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF"}} onClick={() => HandleBottomtoLeftSlide("Staff Mapping")} label="Staff Mapping" {...a11yProps(2)} />
           </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0} >
