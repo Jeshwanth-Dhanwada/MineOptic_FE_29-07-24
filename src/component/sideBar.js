@@ -565,7 +565,15 @@ function Sidebar({ isExpanded, setIsExpanded, handleLinkClick}) {
                       Analytics
                     </Button>
                     <Menu {...bindMenu(popupState)}>
-                      <MenuItem onClick={() => handleLinkClickName('Replay Analysis')}>Replay Analysis</MenuItem>
+                      <MenuItem onClick={() => handleLinkClickName('Replay Analysis')}>
+                      <Link
+                        to="/TipperView"
+                        onClick={() => handleLinkClickName('Activity Analysis')}
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        <span className="" style={active === 'Activity Analysis' ? { color: "#034661" } : { color: "#8C8C8C" }}>Replay Analysis</span>
+                      </Link>
+                      </MenuItem>
                       <MenuItem 
                       style={active === 'Reports' ? { backgroundColor: "#E6ECEF" } : { backgroundColor: "#ffffff" }}
                       onClick={popupState.close}>
