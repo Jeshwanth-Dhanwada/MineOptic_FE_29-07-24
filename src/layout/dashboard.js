@@ -39,6 +39,7 @@ import GantCharts from '../component/gantCharts';
 import SveltaTree from '../component/sveltCharts';
 import SveltaWithDropDown from '../component/svelteChartsdropdown';
 import SveltaWithDropDownExa from '../component/svelta';
+import TipperView from '../views/tipperView';
 import TripSummary from '../component/tripSummary';
 import TripDetails from '../component/tripDetails';
 
@@ -320,6 +321,7 @@ function DashboardLayout(props) {
           <Route path="/gantCharts" element={<GantCharts/>} />
           <Route path="/sveltCharts" element={<SveltaTree/>} />
           <Route path="/SveltaWithDropDown" element={<SveltaWithDropDown/>} />
+          <Route path="/TipperView" element={<TipperView/>} />
           <Route path="/SveltaWithDropDownExa" element={<SveltaWithDropDownExa/>} />
           <Route path="/TripSummary" element={<TripSummary/>} />
           <Route path="/TripDetails" element={<TripDetails/>} />
