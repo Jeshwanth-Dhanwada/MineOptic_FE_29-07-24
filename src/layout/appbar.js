@@ -1,12 +1,9 @@
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import DashboardDrawer from '../component/dashboardDrawer';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -15,15 +12,15 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import { Link,useNavigate } from "react-router-dom";
 import Profile from '../component/profile';
-import Badge from '@mui/material/Badge';
 import Stack from '@mui/material/Stack';
-import MailIcon from '@mui/icons-material/Mail';
-import { BiTask } from "react-icons/bi";
 import { getJobAssign } from '../api/shovelDetails';
 import { BASE_URL } from '../constants/apiConstants';
 import AuthContext from '../context/AuthProvider';
-import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import "./slider.css"
+import { Badge } from 'react-bootstrap';
+import { MailLock } from '@mui/icons-material';
 
 const pages = [ 'New Jobs','Pending Jobs','Finished Jobs']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -121,17 +118,19 @@ const AppBarContainer = () => {
   }, [JobAssigndata, currentDate]);
  
   return (
+    
     <AppBar style={{ 
             position: "fixed",
             height: "45px",
             // backgroundColor:'#fc9445'
             backgroundColor:'#ffffff'
             }}>
+      
       <DashboardDrawer drawerOption="bottom" openDrawer={openDrawer} closeDrawer={closeDrawer} />
       <Container maxWidth="xl">
         
         <Toolbar disableGutters sx={{ display: 'flex',paddingBottom:'17px' }}>
-        <Box
+          <Box
             style={{ display: 'flex', alignItems: 'center',justifyContent: 'center',  }} // Flexbox styles
           >
               <Link
@@ -155,75 +154,18 @@ const AppBarContainer = () => {
               />
             </Link>
           </Box> &nbsp;
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {/* {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))} */}
-            </Menu>
+          &nbsp;
+          {/* <Box className="marquee-container">
+              <div className="marquee-content" style={{backgroundColor:'red'}}>
+                  Important Announcement: Please note that the system will be down for maintenance on Saturday from 3 PM to 6 PM.
+              </div>
+          </Box> */}
+          <Box sx={{ flexGrow: 0}} id="Marquee">
+              <div className="marquee-content" style={{backgroundColor:'white',color:'white'}}>
+                  Important Announcement: Please note that the system will be down for maintenance on Saturday from 3 PM to 6 PM.
+              </div>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' },position:'relative',left:'60%',color:'#45ADFC' }}>
-            {/* {pages.map((page) => ( */}
-              <MenuItem sx={{ color: 'white', display: 'flex',fontWeight: 700,fontSize: '1rem' }} onClick={handleCloseNavMenu}>
-              <Typography variant="body1" component="div">
-              <Stack spacing={2} direction="row" alignItems="center">
-                {/* <Typography variant="body1" component="span">
-                  New Jobs
-                <Badge badgeContent={Assignedjobs} color="secondary">
-                  <MailIcon color="action" />
-                </Badge>
-                </Typography> */}
-              </Stack>
-            </Typography>
-            </MenuItem>
-            {/* <MenuItem sx={{ color: 'white', display: 'flex',fontWeight: 700,fontSize: '1rem' }} onClick={handleCloseNavMenu}>
-              <Typography variant="body1" component="div">
-              <Stack spacing={2} direction="row" alignItems="center">
-                <Typography variant="body1" component="span">
-                  Pending Jobs
-                <Badge badgeContent={Pendingjobs} color="secondary">
-                  <MailIcon color="action" />
-                </Badge>
-                </Typography>
-              </Stack>
-            </Typography>
-            </MenuItem> */}
-            <MenuItem sx={{ color: 'white', display: 'flex',fontWeight: 700,fontSize: '1rem' }} onClick={handleCloseNavMenu}>
-              <Typography variant="body1" component="div">
-              <Stack spacing={2} direction="row" alignItems="center">
-                {/* <Typography variant="body1" component="span">
-                  Finished Jobs
-                <Badge badgeContent={Completejobs} color="secondary" max={1000}>
-                  <MailIcon color="action" />
-                </Badge>
-                </Typography> */}
-              </Stack>
-            </Typography>
-                {/* <Typography textAlign="center" >{page}</Typography> */}
-              </MenuItem>
-             {/* ))} */}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0,marginLeft:'400px'}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

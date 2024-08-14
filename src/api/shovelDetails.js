@@ -372,6 +372,20 @@ export const getTripDetails = () => {
             });
     })
 }
+export const getTripperStateHistory = () => {
+    const apiUrl = `${BASE_URL}/api/tripstatehistory`;
+    return new Promise((resolve, reject) => {
+        axios.get(apiUrl)
+            .then((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+                reject()
+            });
+    })
+}
+
 export const getLocationDetails = () => {
     const apiUrl = `${BASE_URL}/api/locations`;
     return new Promise((resolve, reject) => {

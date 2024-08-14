@@ -100,8 +100,6 @@ function DepartmentForm() {
           </span>,
           {
             position: toast.POSITION.TOP_RIGHT, // Set position to top center
-            // autoClose: 3000, // Optional: Set auto close time in milliseconds
-            // closeButton: false, // Optional: Hide close button
             className: 'custom-toast' // Optional: Add custom CSS class
           }
         );

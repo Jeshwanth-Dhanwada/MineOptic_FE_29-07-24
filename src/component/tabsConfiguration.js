@@ -4,12 +4,9 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import Edgesdata from "./edgesdata";
 import StaffAllocation from "./tabStaffAllocation";
 import DeviceMapping from "./tabsDeviceMapping";
 import Nodesdata from "./Nodesdata";
-import FGmapping from "./FGMapping";
-import BottomFGmapping from "./BottomFGMapping";
 // import Node
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -106,6 +103,8 @@ export default function BasicConfigurationTabs({
                 <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("")} label="Nodes" {...a11yProps(0)} />
                 <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("Staff Mapping")} label="Staff Mapping" {...a11yProps(1)} />
                 <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("Device Mapping")} label="Device Mapping" {...a11yProps(2)} />
+                {/* <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 3 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("Color Configuration")} label="Color Configuration" {...a11yProps(3)} />
+                <Tab style={{fontSize:'10.5px',fontWeight:'bold',color:'#727272', backgroundColor: value === 4 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandleBottomtoLeftSlide("ToolTip Configuration")} label="ToolTip Configuration" {...a11yProps(4)} /> */}
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -117,6 +116,12 @@ export default function BasicConfigurationTabs({
             <CustomTabPanel value={value} index={2}>
             <DeviceMapping/>
             </CustomTabPanel>
+            {/* <CustomTabPanel value={value} index={3}>
+              <ColorConfig />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={4}>
+              <ToolTipConfig />
+            </CustomTabPanel> */}
           </Box>
 
           </div>

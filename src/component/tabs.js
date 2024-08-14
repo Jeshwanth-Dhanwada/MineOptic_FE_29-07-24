@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NodesPopup from "./NodePopup";
 import EdgePopup from "./edgePopup";
 import Shift from "./shift";
@@ -21,6 +21,11 @@ import MachineType from "./machineType";
 import MaterialNodeType from "./materialNnodeType";
 import MaterialsPanel from "./rigtPanel/MaterialPanel";
 import MachineCategory from "./machineCategory";
+import ColorConfig from "./ColorConfig";
+import ToolTipConfig from "./TooltipConfig";
+import { BASE_URL } from "../constants/apiConstants";
+import axios from "axios";
+import { toast } from "react-toastify";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -73,6 +78,96 @@ export default function BasicTabs({
   const handleNewImageNode = (newNode) => {
     setsendtoRoutes(newNode)
   }
+
+  const [TripperStateHistory, setTripStateHistory] = useState([])
+
+  useEffect(() => {
+    // Fetch data from the API when the component mounts
+    const apiUrl =
+      `${BASE_URL}/api/tripstatehistory`;
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setTripStateHistory(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const uniqueStates = new Set();
+  const uniqueStatenames = TripperStateHistory
+                              .filter((item)=>{
+                                if(uniqueStates.has(item.new_state)) return false;
+                                uniqueStates.add(item.new_state)
+                                return true
+                              })
+                              .map((item2)=>({
+                                state : item2.new_state
+                              }))
+  const [columns, setColumns] = useState([]);
+  useEffect(() => {
+    const fetchColumns = async () => {
+      try {
+        const apiUrl = `${BASE_URL}/api/colorconfig/tables`;
+        const response = await axios.get(apiUrl);
+        console.log(response.data, "columns");
+        setColumns(response.data); // Adjust this if needed based on your data structure
+      } catch (error) {
+        console.error("Error fetching column names:", error);
+      }
+    };
+
+    fetchColumns();
+  }, []);
+  console.log(columns,"chcek")
+  const HanldeLoadColorConfig = (item,e) => {
+    if(item === "Color Config" && value === 7){
+      // e.preventDefault();
+      const payload = {
+        colorconfig: uniqueStatenames.map((item) => ({
+          branchId: "1001",
+          stateName: item.state,
+          colorCode: item.colorCode,
+          userId: "1111",
+        })),
+      };
+      console.log(payload,"save");
+      axios
+        .put(`${BASE_URL}/api/colorconfig/bulk`, payload)
+        .then((response) => {
+          console.log(response.data);
+          console.log("New row added successfully");
+        })
+        .catch((error) => {
+          console.error("Error adding new row:", error);
+        });
+      };
+    if(item === "ToolTip Config" && value === 8){
+      console.log(value,"secking",)
+      const payload = {
+        tooltipconfig: columns.map((item) => ({
+          Tcolumn: item,
+          columnName: item.columnName,
+          index: item.index,
+          userId: "1111",
+          branchId: "1001",
+          checkValue:item.checked
+        })),
+      };
+      console.log(payload,"save");
+      
+    axios
+      .put(`${BASE_URL}/api/tooltipconfig/bulk`, payload)
+      .then((response) => {
+        console.log(response.data);
+        console.log("New row added successfully");
+      })
+      .catch((error) => {
+        console.error("Error adding new row:", error);
+      });
+    }}
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -122,6 +217,17 @@ export default function BasicTabs({
                     label="Machine Category"
                     {...a11yProps(6)}
                   /> 
+                  <Tab
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 7 ? "#E6ECEF" : "#FFFFFF" }}
+                    label="Color Config"
+                     
+                    {...a11yProps(7)}
+                  /> 
+                  <Tab
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 8 ? "#E6ECEF" : "#FFFFFF" }}
+                    label="ToolTip config"
+                    {...a11yProps(8)}
+                  /> 
                   
                 </Tabs>
               )}
@@ -163,12 +269,16 @@ export default function BasicTabs({
              <CustomTabPanel value={value} index={6}>
               <MachineCategory />
             </CustomTabPanel>
-            {/*<CustomTabPanel value={value} index={2}>
-              <Employee />
+            <CustomTabPanel value={value} index={7} 
+             onClick={HanldeLoadColorConfig("Color Config")}
+             >
+              <ColorConfig />
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={3}>
-              <DepartmentForm />
-            </CustomTabPanel> */}
+            <CustomTabPanel value={value} index={8}
+            onClick={HanldeLoadColorConfig("ToolTip Config")}
+            >
+              <ToolTipConfig />
+            </CustomTabPanel>
             {/* <CustomTabPanel value={value} index={5}>
               <EmployeeType />
             </CustomTabPanel>
