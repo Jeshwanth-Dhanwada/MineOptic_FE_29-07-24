@@ -12,11 +12,12 @@ const PersistLogin = () => {
         axios.get(`${BASE_URL}/api/auth/refresh`, { withCredentials: true })
             .then(response => {
                 // handle response
-                const { accessToken, username, designation, empId, empTypeId } = response?.data;
+                console.log(response.data,"branch")
+                const { accessToken, username, designation, empId, empTypeId,branchId} = response?.data;
                 setData(username);
-                setAuth({ username, accessToken, designation, empId, empTypeId })
+                setAuth({ username, accessToken, designation, empId, empTypeId, branchId })
                 //navigate("/HomeComponent");
-                console.log(response);
+                console.log(response,"loginissue");
             })
             .catch(error => {
                 // handle error

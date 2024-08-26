@@ -377,7 +377,7 @@ function MaterialNodeType() {
                 </div>
                 <div className="col-4">
                   <label htmlFor="MaterialCategory">Material Category ID:</label>
-                  <select className=" form-control" style={{ fontSize: "11px" }} onChange={handleMaterialCateID} value={MaterialCateID}>
+                  <select className=" form-select" style={{ fontSize: "11px" }} onChange={handleMaterialCateID} value={MaterialCateID}>
                     <option hidden>Material Category ID</option>
                               {MaterialCateData?.map((item) =>
                                         <option value={item?.id}>{item?.id} - {item?.productTypeDescription}</option>

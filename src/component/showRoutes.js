@@ -2,7 +2,6 @@
 import Dagre from "@dagrejs/dagre";
 import React, { useCallback, useState, useEffect, useRef, useMemo, useContext } from "react";
 import EdgeEditPopup from "./EdgeEditor.js";
-import RoutePopup from "./Route.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { Backdrop, Card, Slider } from "@mui/material";
@@ -23,7 +22,6 @@ import MachinegraphNode from "./nodeTypes/MachinegraphNode.js";
 import customNodeSelect from "./nodeTypes/customNodeSelect.js";
 import ConfirmModal from "./commonComponents/confirmModal.js";
 import Employees from "./rigtPanel/employees.js";
-import MaterialsPanel from "./rigtPanel/MaterialPanel.js"
 import AuthContext from "../context/AuthProvider.js";
 import CircularProgress from '@mui/material/CircularProgress';
 import ReactFlow, {
@@ -37,12 +35,7 @@ import ReactFlow, {
 import { BASE_URL } from "../constants/apiConstants.js";
 import BasicTabs from "./tabs.js";
 import RightOperationTabPanel from "./rigtPanel/rightOperationPanel.js";
-// import department from "./component/department.js"
-// import MiniMapNode from './MiniMapNode.js';
-
-// import { initialEdges } from "../nodes-edges.js";
 import "reactflow/dist/style.css";
-// import CustomNode from './component/customnode.js'
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -50,26 +43,16 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { v4 as uuidv4 } from 'uuid';
 import {
-  FaPlus,
-  FaTrash,
-  FaRulerVertical,
-  FaRulerHorizontal,
-  FaEdit,
   FaSave,
   FaCheck,
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 
 import NodeEditor from "./NodeEditor.js";
-import RightTabPanel from "./rigtPanel/panelTabs.js";
 import DevicePanel from "./rigtPanel/devicePanel.js";
-import Priorityjobspanel from "./rigtPanel/Priority_jobspanel.js";
 import RightSlider from "../layout/RightSlider.js";
-import FGmapping from "./FGMapping.js";
 import { BsPlusLg } from "react-icons/bs";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { Menu, MenuItem } from "react-pro-sidebar";
 
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 let directionOn = "";
@@ -257,6 +240,8 @@ const ShowRoutes = ({
   },[nodes])
   const [OpenLoader, setOpenLoader] = useState(false)
 
+  console.log(auth.branchId,"auth")
+  console.log(nodes,"auth")
   useEffect(() => {
     // Fetch data from the API when the component mounts
     setOpenLoader(true)
@@ -266,9 +251,13 @@ const ShowRoutes = ({
       .get(apiUrl)
       .then((response) => {
         setData(response.data);
+
+        console.log(response.data,"branch")
         let x = [];
         for (let index = 0; index < response.data.length; index++) {
           const data = response.data[index];
+          // Filter based on auth.branchId and data.branchId
+        if (data.branchId == auth.branchId) {
           x.push({
             nodeId: data.nodeId,
             // id: getId(),
@@ -308,12 +297,13 @@ const ShowRoutes = ({
           });
         }
         setNodes(x);
+      }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
     setOpenLoader(false)
-  }, [setNodes]);
+  }, [auth.branchId, setNodes]);
 
   const [dataFromChild, setDataFromChild] = useState();
   const [route, setRoute] = useState([]);
@@ -851,7 +841,7 @@ const ShowRoutes = ({
       .map((node) => ({
         nodeId: node.nodeId,
         id: node.id,
-        branchId: "1001",
+        branchId: auth.branchId,
         nodeCategory: node.nodeCategory,
         unit1Measurable: node.unit1Measurable,
         parentNode: node.parentNode,
@@ -898,7 +888,7 @@ const ShowRoutes = ({
     const jsonData = {
       edges: edges.map((edge) => ({
         id: edge.id,
-        branchId: "1001",
+        branchId: auth.branchId,
         edgeId: edge.edgeId,
         edgeDescription: "edgeDescription",
         routeId: route.routeid.toString(),
@@ -945,40 +935,42 @@ const ShowRoutes = ({
               let x = [];
               for (let index = 0; index < response.data.length; index++) {
                 const data = response.data[index];
-                x.push({
-                  nodeId: data.nodeId,
-                  id: data.id,
-                  nodeType: data.nodeType,
-                  MachineType: data.MachineType,
-                  nodeCategory: data.nodeCategory,
-                  unit1Measurable: data.unit1Measurable,
-                  unit2Mandatory: data.unit2Mandatory,
-                  iconId: data.iconId,
-                  itemDescription: data.itemDescription,
-                  nodeImage: data.nodeImage,
-                  type: data.type,
-                  parentNode: data.parentNode,
-                  extent: data.extent,
-                  data: { label: data.nodeName },
-                  sourcePosition: data.sourcePosition,
-                  targetPosition: data.targetPosition,
-                  position: { x: data.xPosition, y: data.yPosition },
-                  style: {
-                    background: data.fillColor, // Set background color
-                    color: data.FontColor, // Set text color
-                    borderColor: data.borderColor,
-                    borderStyle: data.borderStyle,
-                    borderWidth: data.borderWidth,
-                    fontSize: data.FontSize, // Set the font size
-                    fontStyle: data.FontStyle, // Set the font style
-                    width: data.width,
-                    height: data.height,
-                    borderRadius: data.borderRadius,
-                    display: data.borderRadius ? 'flex' : '',
-                    alignItems: data.nodeImage === "" ? 'center' : "",
-                    justifyContent: 'center',
-                  },
-                });
+                if (data.branchId === auth.branchId) {
+                  x.push({
+                    nodeId: data.nodeId,
+                    id: data.id,
+                    nodeType: data.nodeType,
+                    MachineType: data.MachineType,
+                    nodeCategory: data.nodeCategory,
+                    unit1Measurable: data.unit1Measurable,
+                    unit2Mandatory: data.unit2Mandatory,
+                    iconId: data.iconId,
+                    itemDescription: data.itemDescription,
+                    nodeImage: data.nodeImage,
+                    type: data.type,
+                    parentNode: data.parentNode,
+                    extent: data.extent,
+                    data: { label: data.nodeName },
+                    sourcePosition: data.sourcePosition,
+                    targetPosition: data.targetPosition,
+                    position: { x: data.xPosition, y: data.yPosition },
+                    style: {
+                      background: data.fillColor, // Set background color
+                      color: data.FontColor, // Set text color
+                      borderColor: data.borderColor,
+                      borderStyle: data.borderStyle,
+                      borderWidth: data.borderWidth,
+                      fontSize: data.FontSize, // Set the font size
+                      fontStyle: data.FontStyle, // Set the font style
+                      width: data.width,
+                      height: data.height,
+                      borderRadius: data.borderRadius,
+                      display: data.borderRadius ? 'flex' : '',
+                      alignItems: data.nodeImage === "" ? 'center' : "",
+                      justifyContent: 'center',
+                    },
+                  });
+                }
               }
               setNodes(x);
             })
@@ -1048,8 +1040,9 @@ const ShowRoutes = ({
     axios
       .get(apiUrl)
       .then((response) => {
+        const filteredData = response.data.filter(item => String(item.branchId) === String(auth.branchId));
         console.log(response.data);
-        setempAllocation(response.data);
+        setempAllocation(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -1061,7 +1054,8 @@ const ShowRoutes = ({
       .get(apiUrl)
       .then((response) => {
         console.log(response.data);
-        setDeviceAllocation(response.data);
+        const filteredData = response.data.filter(item => String(item.branchId) === String(auth.branchId));
+        setDeviceAllocation(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -1082,7 +1076,7 @@ const ShowRoutes = ({
       const drop = {
         employeeNodeMapping: StaffAllocation.map((item, index) => (
           {
-            branchId: "1001",
+            branchId: auth.branchId,
             emp: item.empId,
             node: item.nodedetails.nodeId,
             nodeType: item.nodeType,
@@ -1116,7 +1110,7 @@ const ShowRoutes = ({
         deviceMapping: DeviceMapping.map((item, index) => (
           {
             deviceId: item.deviceId.toString(),
-            branchId: "1001",
+            branchId: auth.branchId,
             nodeId: item.nodedetails.nodeId.toString(),
             userId: "1111",
           }
@@ -1175,7 +1169,7 @@ const ShowRoutes = ({
         {
           empId: item.empId,
           nodeId: item.nodedetails.nodeId.toString(),
-          branchId: "1001",
+          branchId: auth.branchId,
           shiftNumber: getShiftTime(),
           date: getFormattedToday(indianFormattedDate),
           userId: "1111",
@@ -1221,7 +1215,7 @@ const ShowRoutes = ({
       const drop = {
         jobAssign: JobMapping.map((item, index) => (
           {
-            branchId: "1001",
+            branchId: auth.branchId,
             date: getFormattedToday(indianFormattedDate),
             routeId: "1",
             userId: "1111",
@@ -1400,7 +1394,8 @@ const ShowRoutes = ({
     const apiUrl = `${BASE_URL}/api/employee`;
     axios.get(apiUrl)
       .then((response) => {
-        setEmployees(response.data)
+        const filteredData = response.data.filter(item => String(item.branchId) === String(auth.branchId));
+        setEmployees(filteredData)
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -1434,7 +1429,7 @@ const ShowRoutes = ({
   const handleNewRowSubmit = () => {
     // Prepare the data payload to send to the API
     const newDataPayload = {
-      branchId: "1001",
+      branchId: auth.branchId,
       empId: droppedData.empId,
       nodeId: '1',
       startDate: startDate, // Use the Start Date state
@@ -1535,7 +1530,8 @@ const ShowRoutes = ({
     axios
       .get(apiUrl)
       .then((response) => {
-        setempAllocation(response.data);
+        const filteredData = response.data.filter(item => String(item.branchId) === String(auth.branchId));
+        setempAllocation(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -1545,55 +1541,68 @@ const ShowRoutes = ({
   const showgetEmployees = async (key) => {
     setOpenLoader(true)
     const responsedata = await getEmployees();
-    setEmployeedata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEmployeedata(filteredData, key);
     setOpenLoader(false)
   };
+  
   const showshiftdata = async (key) => {
     const responsedata = await getShifts();
-    setShiftdata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setShiftdata(filteredData, key);
   };
   const showOA_details = async (key) => {
     const responsedata = await getOADetails();
-    setOadetails(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setOadetails(filteredData, key);
   };
   const showItemmaster = async (key) => {
     setOpenLoader(true)
     const responsedata = await getItemmaster();
-    setItemMaster(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setItemMaster(filteredData, key);
     setOpenLoader(false)
   };
   const showDeviceMapping = async (key) => {
     const responsedata = await getDeviceMapping();
-    setDeviceAllocation(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setDeviceAllocation(filteredData, key);
   };
   const showJobAssignMapping = async (key) => {
     const responsedata = await getJobAssign();
-    setjobAssigndata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setjobAssigndata(filteredData, key);
   };
 
   const showNodeAllocation = async (key) => {
     const responsedata = await getNodeAllocation();
-    setNodeAllocation(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setNodeAllocation(filteredData, key);
   };
   const showbatchdata = async (key) => {
     const responsedata = await getbatches();
-    setbatchdata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setbatchdata(filteredData, key);
   };
   const showbatchMasterdata = async (key) => {
     const responsedata = await getbatch_master();
-    setbatchMasterdata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setbatchMasterdata(filteredData, key);
   };
   const showNodemasterdata = async (key) => {
     const responsedata = await getNodeMaster();
-    setNodemasterdata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setNodemasterdata(filteredData, key);
   };
   const showEdgedata = async (key) => {
     const responsedata = await getEdges();
-    setEdgestabledata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEdgestabledata(filteredData, key);
   };
   const showActivitydata = async (key) => {
     const responsedata = await getActivities();
-    setActivitydata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setActivitydata(filteredData, key);
   };
 
   useEffect(() => {
@@ -1612,10 +1621,15 @@ const ShowRoutes = ({
   }, []);
 
   const [expanded, setExpanded] = useState(false);
+  const [isExpandedFull, setIsExpandedFull] = React.useState(false)
+
   const handleExpandToggle = () => {
-    setIsExpandedFull(true);
+    setIsExpandedFull(!isExpandedFull);
     setExpanded(!expanded);
+    setSize(384)
   };
+  console.log(isExpandedFull,"rightslider")
+  console.log(expanded,"rightslider")
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [showAlert, setShowAlert] = useState(false)
   const [filteredEmps, setFilteredEmps] = useState([])
@@ -1629,10 +1643,12 @@ const ShowRoutes = ({
         axios
           .get(apiUrl)
           .then((response) => {
-            setData(response.data);
+            const filteredData = response.data.filter(item => String(item.branchId) === String(auth.branchId));
+            setData(filteredData);
             let x = [];
             for (let index = 0; index < response.data.length; index++) {
               const data = response.data[index];
+              if (data.branchId === auth.branchId) {
               x.push({
                 nodeId: data.nodeId,
                 id: data.id,
@@ -1667,6 +1683,7 @@ const ShowRoutes = ({
                   fontColor: data.FontColor
                 },
               });
+            }
             }
             setNodes(x);
           })
@@ -2669,7 +2686,6 @@ if (parentNode) {
   //   setActive(item);
   //   // handleLinkClick(item)
   // }
-  const [isExpandedFull, setIsExpandedFull] = React.useState(false)
   const [size,setSize] = useState()
   const HandleIcon = (item) => {
     console.log(item,"KKKK")
@@ -2760,10 +2776,10 @@ if (parentNode) {
               connectionLineStyle={connectionLineStyle}
               nodeTypes={nodeTypes}
             >
-              {selectedMenuItem === "Configuration" && selectedMenuItem !== "Planning" && selectedMenuItem !== "Operations" && expanded && (
+              {selectedMenuItem === "Configuration" && expanded && (
                 <Card 
                     id="dasboard-right-container" 
-                    style={{ position: 'fixed', top: '38px' }} 
+                    style={{ position: 'fixed', top: '39px' }} 
                     // className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
                     className={`dashboard-right-container sticky-top ${active === 'FG Mapping' ? (expanded ? 'expanded' : 'partial') : ''}`} >
                   {expanded ? (
@@ -2805,17 +2821,8 @@ if (parentNode) {
                             <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#ffffff" }} onClick={() => HandlebottomSlide("Device")} label="Device" {...a11yProps(1)} />
                           </Tabs>
                         </Box>
-                        {/* <CustomTabPanel value={value} index={0}>
-                          {showRoutePopup &&
-                            <RoutePopup
-                              onCancel={onCloseRoute}
-                              onSave={onSaveRoute}
-                              // dataFromChild={dataFromChild}
-                              onClick={handleChildClick}
-                            />}
-                        </CustomTabPanel> */}
                         <CustomTabPanel value={value} index={0}>
-                          <Employees Employeedata={Employeedata} />
+                          <Employees />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
                           <DevicePanel />
@@ -2826,44 +2833,98 @@ if (parentNode) {
                   </div>
                 </Card>
               )}
-              {selectedMenuItem === "Configuration" && selectedMenuItem !== "Planning" && selectedMenuItem !== "Operations" && !expanded && (
+              {selectedMenuItem === "Configuration" &&  !expanded && (
                 <div
                   id="dasboard-right-container"
                   style={{ position: "fixed", top: "45px" }}
                   className={`dashboard-right-container sticky-top partial`}
                 >
-                  
                   <div className="pt-2" onClick={handleExpandToggle}>
-                  {/* <Slider 
-                    // isExpandedFull={isExpandedFull} 
-                    // setIsExpandedFull={setIsExpandedFull} 
-                    // onclick={HandleHeight}
-                    /> */}
                     <KeyboardDoubleArrowLeftIcon
                       style={{ cursor: "pointer", backgroundColor: "#09587C", 
-                      color: '#ffffff',width:'25',height:'47px',position: "fixed",
-                      right:'0%'  }}
+                        color: '#ffffff',width:'25',height:'47px',position: "fixed",
+                        right:'0%'
+                      }}
                       onClick={handleExpandToggle}
                     />
                   </div>
                 </div>
               )}
-
+              {selectedMenuItem === "Planning" && expanded && (
+                <Card 
+                    id="dasboard-right-container" 
+                    style={{ position: 'fixed', top: '39px' }} 
+                    // className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
+                    className={`dashboard-right-container sticky-top ${active === 'FG Mapping' ? (expanded ? 'expanded' : 'partial') : ''}`} >
+                  {expanded ? (
+                    <div className="pt-2" onClick={handleExpandToggle} >
+                      <RightSlider active={active} isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon}/>
+                      <KeyboardDoubleArrowRightIcon 
+                        style={{  
+                          cursor: "pointer",
+                          backgroundColor: "#09587C", 
+                          color: '#ffffff',
+                          position: "fixed",
+                          right:size? size : '30%',
+                          width:'25',
+                          height:'47px',
+                          top:'46px',
+                          display: 'inline'
+                        }} 
+                        onClick={handleExpandToggle} />
+                    </div>
+                  ) : (
+                    <div className="pt-2" onClick={handleExpandToggle} >
+                      <KeyboardDoubleArrowLeftIcon 
+                        style={{ cursor: 'pointer', color: '#09587C' }} 
+                        onClick={handleExpandToggle} />
+                    </div>
+                  )}
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12 m-0 p-0">
+                      <RightOperationTabPanel
+                       sendtoPlanningtab={HandlesendtoPlanningtab}
+                       toRightOperationTabPanel={toRightOperationTabPanel}
+                      />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              )}
+              {selectedMenuItem === "Planning" &&  !expanded && (
+                <div
+                  id="dasboard-right-container"
+                  style={{ position: "fixed", top: "45px" }}
+                  className={`dashboard-right-container sticky-top partial`}
+                >
+                  <div className="pt-2" onClick={handleExpandToggle}>
+                    <KeyboardDoubleArrowLeftIcon
+                      style={{ cursor: "pointer", backgroundColor: "#09587C", 
+                        color: '#ffffff',width:'25',height:'47px',position: "fixed",
+                        right:'0%'
+                      }}
+                      onClick={handleExpandToggle}
+                    />
+                  </div>
+                </div>
+              )}
+              
               {/* {selectedMenuItem === "Operations" && selectedMenuItem !== "Planning" &&
                 <RightTabPanel nodefromshowRoutes={selectedNodeId} setJobIdSidetoBottom={HandleJobfromOperations} />
               } */}
-              {selectedMenuItem === "Planning" && selectedMenuItem !== "Operations" &&
+              {/* {selectedMenuItem === "Planning" && selectedMenuItem !== "Operations" &&
                 <RightOperationTabPanel
                   sendtoPlanningtab={HandlesendtoPlanningtab}
                   toRightOperationTabPanel={toRightOperationTabPanel}
                 />
-              }
-              {selectedMenuItem === "Priority Job" && selectedMenuItem !== "Operations" &&
+              } */}
+              {/* {selectedMenuItem === "Priority Job" && selectedMenuItem !== "Operations" &&
                 <Priorityjobspanel
                   onClick={HandleJobIdtoJobPriority}
                   onDoubleClick = {HandleMultipleJobs}
                 />
-              }
+              } */}
               <Panel position="top-left">
                 <div
                   style={{
@@ -3076,7 +3137,7 @@ if (parentNode) {
         </ReactFlowProvider>
       </div>
       <ToastContainer />
-      {showAlert && <ConfirmModal nodeData={showAlert} closeConfirmModal={closeConfirmModal} />}
+      {/* {showAlert && <ConfirmModal nodeData={showAlert} closeConfirmModal={closeConfirmModal} />} */}
       {OpenLoader && (
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

@@ -92,6 +92,35 @@ function ToolTipConfig() {
   const [columnData, setColumnData] = useState([]);
   const [entryField,setEntryField] = useState([])
 
+  // const handleColumncheck = (item, index) => {
+  //   const newCheckedState = !checkedColumns[index];
+
+  //   // Update checkedColumns state
+  //   setCheckedColumns(prevState => ({
+  //     ...prevState,
+  //     [index]: newCheckedState  // Toggle the checked state
+  //   }));
+
+  //   // Save item, index, and checked state in columnData
+  //   setColumnData(prevData => [
+  //     ...prevData,
+  //     { item, index, checked: newCheckedState }
+  //   ]);
+
+  //   // Save item, index, and checked state in columnData
+  //   // setColumnData((prevData) => {
+  //   //   const existingIndex = prevData.findIndex((data) => data.index === index);
+
+  //   //   if (existingIndex !== -1) {
+  //   //     const updatedData = [...prevData];
+  //   //     updatedData[existingIndex] = { item, index, checked: newCheckedState };
+  //   //     return updatedData;
+  //   //   } else {
+  //   //     return [...prevData, { index, checked: newCheckedState }];
+  //   //   }
+  //   // });
+  // }
+
   const handleColumncheck = (item, index) => {
     const newCheckedState = !checkedColumns[index];
 
@@ -101,12 +130,27 @@ function ToolTipConfig() {
       [index]: newCheckedState  // Toggle the checked state
     }));
 
-    // Save item, index, and checked state in columnData
-    setColumnData(prevData => [
-      ...prevData,
-      { item, index, checked: newCheckedState }
-    ]);
-  }
+    // Update columnData state
+    setColumnData(prevData => {
+      const existingIndex = prevData.findIndex(data => data.index === index);
+
+      if (existingIndex !== -1) {
+        // If the item already exists and the newCheckedState is false, remove it
+        if (!newCheckedState) {
+          return prevData.filter((_, i) => i !== existingIndex);
+        } else {
+          // If the item exists and newCheckedState is true, update it
+          const updatedData = [...prevData];
+          updatedData[existingIndex] = { item, index, checked: newCheckedState };
+          return updatedData;
+        }
+      } else {
+        // If the item doesn't exist, add it to the array
+        return [...prevData, { item, index, checked: newCheckedState }];
+      }
+    });
+};
+
 
   const handleInputChange = (e, index,Id) => {
     const newValue = e.target.value;
@@ -118,15 +162,14 @@ function ToolTipConfig() {
     }));
   };
 
-  console.log(checkedColumns,"showdata")
-  console.log(columnData,"showdata")
-  console.log(ToolTipdata,"showdata")
+  console.log(checkedColumns,"crosscheck")
+  console.log(columnData,"crosscheck")
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
         <form onSubmit={handleSubmit} style={{ fontSize: "11px" }}>
-          <div className="container">
-            <div className="col-12 p-2">
+          <div className="container-fluid">
+            {/* <div className="col-12 p-2"> */}
               <div className="offset-0 row mt-3">
                 <div className="row">
                   {ToolTipdata.map((item,index)=>(
@@ -134,19 +177,20 @@ function ToolTipConfig() {
                   <input 
                       type="checkbox"
                       style={{ width: '20px' }}
-                      checked={item.columnName ? item.columnName :!!checkedColumns[index]}
-                      // checked={!!checkedColumns[index]}
+                      // checked={item.checkValue == 1 || !!checkedColumns[index]}
+                      checked={checkedColumns[index] ?? item.checkValue == 1}
                       onChange={() => handleColumncheck(item, index)} 
                   /> &nbsp;
-                  {checkedColumns[index] ? (
+                  <span>{item.columnName ? item.columnName : item.Tcolumn}</span>&nbsp;
+                  {item.checkValue != 1 && checkedColumns[index] &&  (
                     <input 
                       type="text" 
+                      style={{height:'18px',width:'120px'}}
                       value={entryField[item.id]} // You can bind this to state if you want it editable
                       onChange={(e) => handleInputChange(e, index,item.Id)} // Add an onChange handler if needed
                     />
-                  ) : (
-                    <span>{item.columnName ? item.columnName : item.Tcolumn}</span>
-                  )}
+                  )
+                  }
                 </div>
                   ))}
                 </div>
@@ -168,7 +212,7 @@ function ToolTipConfig() {
                 </div>
               </div>
             </div>
-          </div>
+          {/* </div> */}
         </form>
 
       <ToastContainer />

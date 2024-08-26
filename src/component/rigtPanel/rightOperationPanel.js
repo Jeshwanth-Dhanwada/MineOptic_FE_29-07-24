@@ -3,15 +3,13 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getAttendance, getEmpNodeMapping, getEmployees, getOADetails, getStaffAllocation } from "../../api/shovelDetails";
-import { Backdrop, Card, CircularProgress } from "@mui/material";
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import AllJobs from "./allJobsPanel";
 import NodeState from "./AttendancePanel";
 import NodeAllocation from "./nodeAllocation";
-import RightSlider from "../../layout/RightSlider";
+import AuthContext from "../../context/AuthProvider";
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -47,6 +45,7 @@ function a11yProps(index) {
 
 export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlanningtab, toRightOperationTabPanel }) {
   const [value, setValue] = useState(0);
+  const {auth} = useContext(AuthContext)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -64,45 +63,43 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
     showAttendance();
   }, []);
 
-  function getEmployeeNamebyID(empId) {
-    const emp = Employeedata.find((item) => String(item.empId) === empId);
-    return emp ? emp.employeeName : 'Node Not Found';
-  }
  const [OpenLoader,setOpenLoader] = useState(false)
+
   const showOA_details = async (key) => {
     setOpenLoader(true)
     const responsedata = await getOADetails();
-    setOadetails(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setOadetails(filteredData, key);
     setOpenLoader(false)
   };
-  console.log(Oadetails,"30004")
+
   const showgetEmployees = async (key) => {
     const responsedata = await getEmployees();
-    setEmployeedata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEmployeedata(filteredData, key);
   };
 
   const showgetStaffAllocation = async (key) => {
     const responsedata = await getStaffAllocation();
-    setstaffAllocation(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setstaffAllocation(filteredData, key);
   };
 
   const showemployeeNodeMap = async (key) => {
     const responsedata = await getEmpNodeMapping();
-    setemployeeNodeMap(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setemployeeNodeMap(filteredData, key);
   };
+
   const showAttendance = async (key) => {
     const responsedata = await getAttendance();
-    setattendancedata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setattendancedata(filteredData, key);
   };
 
-  const [expanded, setExpanded] = useState(false);
-  const handleExpandToggle = () => {
-    setIsExpandedFull(true);
-    setExpanded(!expanded);
-  };
-
+  
   let Attend = [];
-  let X = 0;
+
   for (let i = 0; i < Employeedata.length; i++) {
     const empNodeVal = employeeNodeMap.filter(
       (item) => Employeedata[i].empId == item?.emp?.empId
@@ -140,21 +137,74 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
         setValue(1); // Staff Mapping tab
         break;
       case "Staff Mapping":
-        setValue(2); // Device Mapping tab
+        setValue(2); // Staff Mapping tab
         break;
       // Add more cases for other values if needed
       default:
         setValue(0); // Default to Nodes tab
     }
   }, [toRightOperationTabPanel])
-  const [isExpandedFull, setIsExpandedFull] = React.useState(false)
-  const [size,setSize] = useState()
-  const HandleIcon = (item) => {
-    console.log(item,"KKKK")
-    setSize(item)
-  }
+  
   return (
-    // expanded ? (
+    
+//     <Card 
+//     id="dasboard-right-container" 
+//     style={{ position: 'fixed', top: '45px' }} 
+//     // className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}>
+//     className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`} >
+//   {expanded ? (
+//     <div className="pt-2">
+//     {/* <div className="pt-2" onClick={handleExpandToggle}> */}
+//       <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon} />
+//       <KeyboardDoubleArrowRightIcon
+//               style={{  
+//                 cursor: "pointer",
+//                 backgroundColor: "#09587C", 
+//                 color: '#ffffff',
+//                 position: "fixed",
+//                 right:size? size : '30%',
+//                 width:'25',
+//                 height:'47px',
+//                 top:'46px',
+//                 display: 'inline'
+//               }} 
+//               onClick={handleExpandToggle}
+//             />
+//     </div>
+//   ) : (
+//     <div className="pt-2" onClick={handleExpandToggle}>
+//       <KeyboardDoubleArrowLeftIcon
+//             style={{ cursor: "pointer", backgroundColor: "#09587C", 
+//             color: '#ffffff',width:'25',height:'47px',position: "fixed",
+//             right:'0%'}}
+//             onClick={handleExpandToggle}
+//           />
+//     </div>
+//   )}
+// </Card> 
+  <div >
+    <Box sx={{ position: "relative" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("")} label="Attendance" {...a11yProps(0)} />
+        <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("Job Mapping")} label="Job Assignment" {...a11yProps(1)} />
+        <Tab style={{ fontSize: '10.5px', fontWeight: 'bold', color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#FFFFFF" }} onClick={() => handlelabel("Staff Mapping")} label="Staff Allocation" {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <NodeState />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <AllJobs Oadetails={Oadetails} />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <NodeAllocation />
+      </CustomTabPanel>
+    </Box>
+  </div>
+  )}
+
+ // expanded ? (
 
     //   <div>
     //       <div className="pt-2" onClick={handleExpandToggle}>
@@ -227,63 +277,3 @@ export default function RightOperationTabPanel({ selectedMenuItem, sendtoPlannin
     //     )}
     //   </div>
     // )
-  
-<Card
-  id="dasboard-right-container"
-  style={{ position: 'fixed', top: '45px' }}
-  className={`dashboard-right-container sticky-top ${expanded ? 'expanded' : 'partial'}`}
->
-  {expanded ? (
-    <div className="pt-2" onClick={handleExpandToggle}>
-      <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleIcon} />
-      <KeyboardDoubleArrowRightIcon
-              style={{  
-                cursor: "pointer",
-                backgroundColor: "#09587C", 
-                color: '#ffffff',
-                position: "fixed",
-                right:size? size : '30%',
-                width:'25',
-                height:'47px',
-                top:'46px',
-                display: 'inline'
-              }} 
-              onClick={handleExpandToggle}
-            />
-    </div>
-  ) : (
-    <div className="pt-2" onClick={handleExpandToggle}>
-      <KeyboardDoubleArrowLeftIcon
-            style={{ cursor: "pointer", backgroundColor: "#09587C", 
-            color: '#ffffff',width:'25',height:'47px',position: "fixed",
-            right:'0%'}}
-            onClick={handleExpandToggle}
-          />
-    </div>
-  )}
-  <div className="container-fluid">
-    <div className="row">
-      <div className="col-12 m-0 p-0">
-        <Box sx={{ position: "relative" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Attendance" {...a11yProps(0)} />
-              <Tab label="Job Assignment" {...a11yProps(1)} />
-              <Tab label="Staff Allocation" {...a11yProps(2)} />
-            </Tabs>
-          </Box>
-          <CustomTabPanel value={value} index={0}>
-            <NodeState />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <AllJobs Oadetails={Oadetails} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            <NodeAllocation />
-          </CustomTabPanel>
-        </Box>
-      </div>
-    </div>
-  </div>
-</Card>
-)}

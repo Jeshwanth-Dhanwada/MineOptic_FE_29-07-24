@@ -308,7 +308,7 @@ const TipperView = () => {
         <div className="col-md-4 col-lg-4" style={{height:"20px"}}>
           <DateTimeRangeField
             dateRange={datestartRange}
-            setDateRange={setdatestartRange}
+            setdatestartRange={setdatestartRange}
             minDateTime={minDateTime}
             endTime={endTime}
             setEndTime={setEndTime}

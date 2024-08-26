@@ -1,7 +1,10 @@
+import { getEmployees } from "../../api/shovelDetails";
 import "./rightpanel.css";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthProvider";
+import { Backdrop, CircularProgress } from "@mui/material";
 
-const Employees = ({ employees, Employeedata }) => {
+const Employees = () => {
   const onDragStart = (event, empData) => {
     event.dataTransfer.setData(
       "application/reactflow",
@@ -9,6 +12,19 @@ const Employees = ({ employees, Employeedata }) => {
     );
     event.dataTransfer.effectAllowed = "move";
   };
+  const {auth} = useContext(AuthContext)
+  const [OpenLoader,setOpenLoader] = useState(false)
+  const [Employeedata,setEmployeedata] = useState([])
+  const showgetEmployees = async (key) => {
+    setOpenLoader(true)
+    const responsedata = await getEmployees();
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEmployeedata(filteredData, key);
+    setOpenLoader(false)
+  };
+  useEffect(()=>{
+    showgetEmployees()
+  },[])
   return (
     <aside>
       <div className="employee-list-container">
@@ -34,16 +50,15 @@ const Employees = ({ employees, Employeedata }) => {
             ))}
           </tbody>
         </table>
-        {/* </div> */}
-        {/* {Employeedata.map(emp => 
-      <div
-        className="dndnode input employee-list-item"
-        onDragStart={(event) => onDragStart(event, emp)}
-        draggable
-      >
-          {emp.userName}
-      </div>
-        )} */}
+        {OpenLoader && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={OpenLoader}
+          // onClick={handleClose}
+        >
+          <CircularProgress size={80} color="inherit" />
+        </Backdrop>
+        )}
       </div>
     </aside>
   );

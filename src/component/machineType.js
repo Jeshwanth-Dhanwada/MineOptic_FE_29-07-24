@@ -381,7 +381,7 @@ function MachineType() {
                 </div>
                 <div className="col-4">
                   <label htmlFor="MachineCategory">Machine Category ID:</label>
-                  <select className="m-1 form-control" style={{ fontSize: "11px" }} onChange={handleMachineCategory} value={MachineCateId}>
+                  <select className="m-1 form-select" style={{ fontSize: "11px" }} onChange={handleMachineCategory} value={MachineCateId}>
                     <option hidden>Machine Category ID</option>
                               {machineCategory?.map((item) =>
                                         <option value={item?.CategoryId}>{item?.CategoryId} - {item?.CategoryDescription}</option>

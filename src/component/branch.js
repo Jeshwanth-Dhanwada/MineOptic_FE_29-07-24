@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { FaXmark, FaCheck, FaSistrix,FaMinus } from "react-icons/fa6";
+import {FaSistrix,FaMinus } from "react-icons/fa6";
 
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
@@ -67,8 +67,6 @@ function Branch() {
         .then((response) => {
           console.log(response.data);
           setData(response.data);
-          // const routedata.push(response.data)
-          // console.log(routedata,"passing to the variable")
         })
         .catch((error) => {
           console.error("Error fetching data:", error);

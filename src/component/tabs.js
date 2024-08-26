@@ -26,6 +26,7 @@ import ToolTipConfig from "./TooltipConfig";
 import { BASE_URL } from "../constants/apiConstants";
 import axios from "axios";
 import { toast } from "react-toastify";
+import EqpType from "./eqpType";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -181,53 +182,66 @@ export default function BasicTabs({
                   onChange={handleChange}
                   aria-label="basic tabs example"
                   style={{background:'#FFFFFF'}}
+                  variant="scrollable"
+                  scrollButtons="auto"
                 >
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 0 ? "#E6ECEF" : "#FFFFFF"}}
                     label="Properties"
                     {...a11yProps(0)}
                   />
-                   <Tab
-                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Organisation"
-                    {...a11yProps(1)}
-                  />
                   <Tab
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 1 ? "#E6ECEF" : "#FFFFFF" }}
+                    label="Employee"
+                    {...a11yProps(1)}
+                  /> 
+                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 2 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Branch"
+                    label="Organisation"
                     {...a11yProps(2)}
                   />
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 3 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Machine Type"
+                    label="Branch"
                     {...a11yProps(3)}
-                  /> 
+                  />
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 4 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Material Type"
+                    label="Machine Type"
                     {...a11yProps(4)}
                   /> 
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 5 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Material Category"
+                    label="Material Type"
                     {...a11yProps(5)}
                   /> 
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 6 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Machine Category"
+                    label="Material Category"
                     {...a11yProps(6)}
                   /> 
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 7 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="Color Config"
-                     
+                    label="Machine Category"
                     {...a11yProps(7)}
                   /> 
                   <Tab
                     style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 8 ? "#E6ECEF" : "#FFFFFF" }}
-                    label="ToolTip config"
+                    label="Color Config"
+                     
                     {...a11yProps(8)}
                   /> 
+                  <Tab
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 9 ? "#E6ECEF" : "#FFFFFF" }}
+                    label="ToolTip config"
+                    {...a11yProps(9)}
+                  /> 
+                  <Tab
+                    style={{ fontSize: "10.5px", fontWeight: "bold",color:'#727272', backgroundColor: value === 10 ? "#E6ECEF" : "#FFFFFF" }}
+                    label="State Category"
+                    {...a11yProps(10)}
+                  /> 
+                  
                   
                 </Tabs>
               )}
@@ -251,33 +265,41 @@ export default function BasicTabs({
                 ""
               )}
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-              <Organisation />
+            <CustomTabPanel value={value} index={1}
+            onClick={HanldeLoadColorConfig("Employee")}
+            >
+              <Employee />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
+              <Organisation />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
               <Branch />
             </CustomTabPanel>
-             <CustomTabPanel value={value} index={3}>
+             <CustomTabPanel value={value} index={4}>
               <MachineType />
             </CustomTabPanel>
-             <CustomTabPanel value={value} index={4}>
+             <CustomTabPanel value={value} index={5}>
               <MaterialNodeType />
             </CustomTabPanel>
-             <CustomTabPanel value={value} index={5}>
+             <CustomTabPanel value={value} index={6}>
               <MaterialCategory />
             </CustomTabPanel>
-             <CustomTabPanel value={value} index={6}>
+             <CustomTabPanel value={value} index={7}>
               <MachineCategory />
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={7} 
+            <CustomTabPanel value={value} index={8} 
              onClick={HanldeLoadColorConfig("Color Config")}
              >
               <ColorConfig />
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={8}
+            <CustomTabPanel value={value} index={9}
             onClick={HanldeLoadColorConfig("ToolTip Config")}
             >
               <ToolTipConfig />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={10}>
+              <EqpType />
             </CustomTabPanel>
             {/* <CustomTabPanel value={value} index={5}>
               <EmployeeType />

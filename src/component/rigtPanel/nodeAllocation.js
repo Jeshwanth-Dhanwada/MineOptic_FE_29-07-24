@@ -4,13 +4,13 @@ import axios from "axios";
 import { FaXmark, FaSistrix } from "react-icons/fa6";
 import AuthContext from "../../context/AuthProvider";
 import TextField from "@mui/material/TextField";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { BASE_URL } from "../../constants/apiConstants";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 function NodeAllocation() {
+  const {auth} = useContext(AuthContext)
   const onDragStart = (event, job) => {
     event.dataTransfer.setData("application/reactflow", JSON.stringify(job));
     event.dataTransfer.effectAllowed = "move";
@@ -33,8 +33,8 @@ function NodeAllocation() {
     axios
       .get(apiUrl)
       .then((response) => {
-//         console.log(response.data);
-        setData(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setData(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -46,8 +46,8 @@ function NodeAllocation() {
     axios
       .get(apiUrl)
       .then((response) => {
-        // console.log(response.data);
-        setEmployeeData(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setEmployeeData(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -60,7 +60,8 @@ function NodeAllocation() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setShiftdata(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setShiftdata(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -167,10 +168,8 @@ function NodeAllocation() {
     axios
       .get(apiUrl)
       .then((response) => {
-//         console.log(response.data);
-        setNodeAllocation(response.data);
-        // const routedata.push(response.data)
-        // console.log(routedata,"passing to the variable")
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setNodeAllocation(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

@@ -11,11 +11,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ShowRoutes from '../component/showRoutes';
 import HomeComponent from "../component/showNodes"
 import { useState } from 'react';
-import RightTabPanel from '../component/rigtPanel/panelTabs';
 import BasicConfigurationTabs from '../component/tabsConfiguration';
-import TabsPlanning from '../component/tabsPlanning';
 import BasicPlanningTabs from '../component/tabsPlanning';
-import BottomOperationsTabs from '../component/bottomOperationstab';
 import Analyticstab from '../component/Analytics';
 import JobPrioritytabs from '../component/JobPrioritytabs';
 import JobPriorityGraphs from '../component/JobPriorityGraphs';
@@ -23,14 +20,12 @@ import MachinewiseReport from '../component/MachinewiseReport';
 import MaterialProductionReport from '../component/MaterialProdReport';
 import MaterialWiseReport from '../component/MaterialWiseReport';
 import JobStatus from '../component/job_status';
-import Dummy from '../component/dummy';
 import RawMaterialUpload from '../component/RawMaterialUpload';
 import RawMaterialData from '../component/RMDataUpload';
 import RMFabricUpload from '../component/RMFabricUpload';
 import ItemRefresh from '../component/ItemRefresh';
 import JobRefresh from '../component/JobRefresh';
 import JobPrioritizing from '../component/JobPrioritizing';
-import RightSlider from './RightSlider';
 import UserLogin from '../component/login';
 import PersistLogin from '../component/PersistLogin';
 import AuthContext from '../context/AuthProvider';
@@ -38,10 +33,12 @@ import WorkingHourSchedule from '../component/WorkingHourSchedule';
 import GantCharts from '../component/gantCharts';
 import SveltaTree from '../component/sveltCharts';
 import SveltaWithDropDown from '../component/svelteChartsdropdown';
-import SveltaWithDropDownExa from '../component/svelta';
 import TipperView from '../views/tipperView';
 import TripSummary from '../component/tripSummary';
 import TripDetails from '../component/tripDetails';
+import Supersetreport from '../component/Supersetreport';
+import EquipmentReport from '../component/EquipmentReport';
+import EqpType from '../component/eqpType';
 
 // import showNodes
 
@@ -58,7 +55,7 @@ function DashboardLayout(props) {
   const [selectedEdge, setSelectedEdge] = React.useState(null);
   const [edges, setEdges] = useState([]); // Make sure to initialize this state properly
   const [nodes, setNodes] = useState([]); // Make sure to initialize this state properly
-  const width = isSideBarExpanded ? "79%" : "95%";
+  const width = isSideBarExpanded ? "80%" : "95%";
   const marginLeft = isSideBarExpanded ? `calc(20% + 8px)` : "73px"
   const footerHeight = isExpandedFull ? "55%" : "10%";
   const IconfooterHeight = isExpandedFull ? "100%" : "10%";
@@ -183,7 +180,9 @@ function DashboardLayout(props) {
       )}
       <br/>
       <div className='app-footer-content' style={{ width, marginLeft, position: 'fixed' }}>
-        {isExpandedFull ? <Card id="dasboard-footer-container" className='dashboard-container' style={{ height: footerHeight,display:'inline-flex'}}>
+        {isExpandedFull ? 
+        <Card id="dasboard-footer-container" className='dashboard-container' style={{ height: footerHeight,display:'inline-flex'}}>
+          {/* <KeyboardDoubleArrowDownIcon className='drawer-arrow-icon' id='DownIconStyle' onClick={() => setIsExpandedFull(false)} /> */}
           <Slider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull} onclick={HandleHeight}/>
           {(selectedMenuItem === "Administration") && (
             <BasicTabs
@@ -322,9 +321,12 @@ function DashboardLayout(props) {
           <Route path="/sveltCharts" element={<SveltaTree/>} />
           <Route path="/SveltaWithDropDown" element={<SveltaWithDropDown/>} />
           <Route path="/TipperView" element={<TipperView/>} />
-          <Route path="/SveltaWithDropDownExa" element={<SveltaWithDropDownExa/>} />
+          {/* <Route path="/SveltaWithDropDownExa" element={<SveltaWithDropDownExa/>} /> */}
           <Route path="/TripSummary" element={<TripSummary/>} />
           <Route path="/TripDetails" element={<TripDetails/>} />
+          <Route path="/Supersetreport" element={<Supersetreport/>} />
+          <Route path="/EquipmentReport" element={<EquipmentReport/>} />
+          <Route path="/EqpType" element={<EqpType/>} />
         </Route>
         </Routes>
         </div>

@@ -40,7 +40,7 @@ function UserLogin() {
   const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
-
+  
   const [employeedata, setemployeedata] = useState([]);
   const [justifyActive, setJustifyActive] = useState("tab1");
   const [name, setName] = useState('');
@@ -87,6 +87,8 @@ function UserLogin() {
     event.preventDefault();
   };
 
+  
+  console.log(auth,"loginissue")
   useEffect(() => {
     showEmployees();
     if (auth?.username) {
@@ -122,10 +124,11 @@ function UserLogin() {
       const response = await axios.post(`${BASE_URL}/api/auth`, data, {
         withCredentials: true,
       });
-      const { accessToken, designation, empId, empTypeId } = response?.data;
-      setAuth({ username, accessToken, designation, empId, empTypeId });
+      const { accessToken, designation, empId, empTypeId, branchId } = response?.data;
+      setAuth({ username, accessToken, designation, empId, empTypeId,branchId});
       navigate("/ShowRoutes");
-      console.log(response);
+      console.log(response,"loginissue");
+      
     } catch (error) {
       toast.error(<span>{error.response.data.message}</span>);
       console.log("Error Logging in", error);
@@ -135,30 +138,15 @@ function UserLogin() {
       `Logging in with username: ${username} and password: ${password}`
     );
   };
+  // handleLogin(() => {
+  //   console.log(auth,"loginissue"); // auth should be updated now
+  // });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  // const handleLogout = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     // Use async/await to wait for each request to complete
-  //     const data = { userName: username, password: password }
-  //     const response = await axios.post("http://localhost:5000/api/auth/logout", data);
-  //     const { accessToken, designation, empId } = response?.data;
-  //     setAuth({ username, accessToken, designation, empId })
-  //     navigate("/login");
-  //     console.log(response);
-  //   } catch (error) {
-  //     toast.error(<span>{error.response.data.message}</span>)
-  //     console.log('Error Logging in', error);
-  //     return;
-  //   }
-  //   console.log(`Logged Out username: ${username} and password: ${password}`);
-  // };
   return (
     <div className="container-fluid h-100">
       <div className="row justify-content-center h-100 mt-5">

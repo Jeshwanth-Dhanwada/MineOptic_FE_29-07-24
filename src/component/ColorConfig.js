@@ -343,31 +343,16 @@ function ColorConfig() {
         <div className="container" >
         <div className="col-12 p-2">
           <div className="offset-0 row mt-3" style={{height:'330.5px',overflowY:'scroll'}}>
-            <div className="col-3">
+            <div className="col-2">
               <table className="table table-bordered tablestriped">
                 <thead className="sticky-top">
                     <tr>
                       <th style={{width:'50px'}}>State</th>
                       <th style={{width:'50px'}}>Color</th>
-                      <th style={{width:'40px'}}>Actions</th>
+                      {/* <th style={{width:'40px'}}>Actions</th> */}
                     </tr>
                 </thead>
                 <tbody>
-                {/* {ColorConfigdata.map((item,index)=>
-                    <tr key={item.Id}>
-                      <td>{item.stateName}</td>
-                      <td>
-                        <input 
-                          type="color" 
-                          className="form-control" 
-                          value={StateColor[item?.Id] ||item?.colorCode} 
-                          onChange={(event) => handleColorChange(event, index,item.Id)}
-                          disabled={!enableColor}
-                          />
-                      </td>
-                      <td style={{textAlign:'center'}}><LiaEdit style={{cursor:'pointer'}} onClick={() => handleEdit(item.Id)}/></td>
-                    </tr>
-                  )} */}
                    {ColorConfigdata.map((item, index) => (
                       <tr key={item.Id}>
                         <td>{item.stateName}</td>
@@ -375,14 +360,15 @@ function ColorConfig() {
                           <input 
                             type="color" 
                             className="form-control" 
+                            style={{height:'20px'}}
                             value={StateColor[item?.Id] || item?.colorCode} 
                             onChange={(event) => handleColorChange(event, index, item?.Id)}
-                            disabled={editingId !== item.Id} // Enable only if this row is being edited
+                            // disabled={editingId !== item.Id} // Enable only if this row is being edited
                           />
                         </td>
-                        <td style={{ textAlign: 'center' }}>
+                        {/* <td style={{ textAlign: 'center' }}>
                           <LiaEdit style={{ cursor: 'pointer' }} onClick={() => handleEdit(item.Id)} />
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                 </tbody>

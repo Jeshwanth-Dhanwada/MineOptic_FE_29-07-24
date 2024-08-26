@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getEmpNodeMapping, getEmployees,getNodeMaster } from '../api/shovelDetails';
 import { FaCheck, FaMinus, FaPlus, FaXmark } from 'react-icons/fa6';
 import { FaEdit } from 'react-icons/fa';
@@ -14,9 +14,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { Backdrop, CircularProgress } from '@mui/material';
+import AuthContext from '../context/AuthProvider';
 
 function StaffAllocation() {
 
+  const {auth} = useContext(AuthContext)
   const [EmpNodeMapping, setEmpNodeMapping] = useState([]);
   const [Employeedata, setEmployeedata] = useState([]);
   const [nodedata, setnodedata] = useState([]);
@@ -26,16 +28,19 @@ function StaffAllocation() {
   const showEmpNodeMapping = async (key) => {
     setOpenLoader(true)
     const responsedata = await getEmpNodeMapping();
-    setEmpNodeMapping(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEmpNodeMapping(filteredData, key);
     setOpenLoader(false)
   };
   const showEmployees = async (key) => {
     const responsedata = await getEmployees();
-    setEmployeedata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setEmployeedata(filteredData, key);
   };
   const showNodes = async (key) => {
     const responsedata = await getNodeMaster();
-    setnodedata(responsedata, key);
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setnodedata(filteredData, key);
   };
 
   useEffect(() => {

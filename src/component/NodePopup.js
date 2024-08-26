@@ -283,19 +283,19 @@ const handleMachineType = (event) => {
     //   return 
     // }
 
-    const fd = new FormData();
-    fd.append('file', fileTODB);
-    console.log(fd,"save")
-    await axios.post('http://localhost:5001/upload-image', fd,
-     {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-       })
-        .then(response => {
-            console.log(response, "save")
-        })
-        .catch(err => console.log(err, "save"))
+    // const fd = new FormData();
+    // fd.append('file', fileTODB);
+    // console.log(fd,"save")
+    // await axios.post('http://localhost:5001/upload-image', fd,
+    //  {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //     }
+    //    })
+    //     .then(response => {
+    //         console.log(response, "save")
+    //     })
+    //     .catch(err => console.log(err, "save"))
 
     // Calculate the center position for the label within the node
     const labelX = node.position.x + node.style.width / 2;

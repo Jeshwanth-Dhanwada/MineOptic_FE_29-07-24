@@ -8,15 +8,12 @@ import moment from "moment";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { BASE_URL } from "../constants/apiConstants.js";
 import { v4 as uuidv4 } from "uuid";
 import { FaCheck, FaSistrix } from "react-icons/fa";
-import { RiFilter3Fill } from "react-icons/ri";
 import { IoCloseCircle } from "react-icons/io5";
 import { AiFillCloseSquare } from "react-icons/ai";
 import "./svelteCharts.css";
-// import "./sidebar.css";
 
 import * as React from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -40,6 +37,7 @@ import Modal from '@mui/material/Modal';
 
 import { Backdrop, Card, Slider } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
+import AuthContext from "../context/AuthProvider.js";
 
 const style = {
   position: 'absolute',
@@ -66,21 +64,35 @@ const MenuProps = {
 };
 
 const SveltaWithDropDown = () => {
+  const {auth} = React.useContext(AuthContext)
   const [newTaskDataa, setNewtaskData] = useState([]);
   const [Nodesdata, setNodesdata] = useState([]);
   const [locationdata, setLocationdata] = useState([]);
+  const [colorConfigdata, setColorConfigdata] = useState([]);
   const [FilteredTruckHistory, setFilteredTruckHistory] = useState([]);
   const [FilteredExcavatorHistory, setFilteredExcavatorHistory] = useState([]);
   const ganttRef = useRef(null); // Reference to store the Gantt chart instance
   const ganttRef1 = useRef(null); // Reference to store the Gantt chart instance
-  const [OpenLoader, setOpenLoader] = useState(false)
   const [OpenLoader1, setOpenLoader1] = useState(false)
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/locations`)
       .then((response) => {
-        setLocationdata(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setLocationdata(filteredData);
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/api/colorconfig`)
+      .then((response) => {
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setColorConfigdata(filteredData);
       })
       .catch((error) => {
         console.error("Error saving data:", error);
@@ -370,29 +382,33 @@ const SveltaWithDropDown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setOpenLoader1(true)
         // Fetch data from the API
         const [TipperStateHistory, Excavatorhistory] = await Promise.all([
           axios.get(`${BASE_URL}/api/tripstatehistory`),
-          axios.get(`${BASE_URL}/api/excavatorhistory`),
+          axios.get(`${BASE_URL}/api/ExcavatorStatehistory`),
         ]);
-        console.log(Excavatorhistory.data,"Excavatorhistory")
+        const filteredTipperData = TipperStateHistory.data.filter((item) => String(item.branchId) === String(auth.branchId));
+        const filteredExcavatorData = Excavatorhistory.data.filter((item) => String(item.branchId) === String(auth.branchId));
+        console.log(filteredTipperData,"Excavatorhistory")
+        console.log(filteredExcavatorData,"Excavatorhistory")
         
-        TipperStateHistory.data.sort((a, b) => {
+        filteredTipperData.sort((a, b) => {
           if (a.tipper_id < b.tipper_id) return -1;
           if (a.tipper_id > b.tipper_id) return 1;
           return 0;
         });
 
-        Excavatorhistory.data.sort((a, b) => {
+        filteredExcavatorData.sort((a, b) => {
           if (a.excavator_id < b.excavator_id) return -1;
           if (a.excavator_id > b.excavator_id) return 1;
           return 0;
         });
 
-        setData2(TipperStateHistory.data);
-        setExcavatordata(Excavatorhistory.data)
+        setData2(filteredTipperData);
+        setExcavatordata(filteredExcavatorData)
 
-        const startT = TipperStateHistory.data.map(
+        const startT = filteredTipperData.map(
           (item) => new Date(item.state_date)
         );
 
@@ -446,7 +462,7 @@ const SveltaWithDropDown = () => {
         setMaxFilteringDate(datetofilter1);
 
         const uniqueAgentIDs = new Set();
-        const rowsData = TipperStateHistory.data
+        const rowsData = filteredTipperData
           .filter((data) => {
             if (uniqueAgentIDs.has(data.tipper_id)) return false;
             uniqueAgentIDs.add(data.tipper_id);
@@ -459,7 +475,7 @@ const SveltaWithDropDown = () => {
           }));
 
         const uniqueShovels = new Set();
-        const shoveldata = Excavatorhistory.data
+        const shoveldata = filteredExcavatorData
         .filter((data) => {
           if (uniqueShovels.has(data.excavator_id)) return false;
           uniqueShovels.add(data.excavator_id);
@@ -467,11 +483,14 @@ const SveltaWithDropDown = () => {
         })
         .map((data1) => ({
           id: data1.excavator_id,
-          enableDragging: true
+          // enableDragging: true
         }));
         console.log(shoveldata,"shoveldata")
+        console.log(filteredExcavatorData,"shoveldata")
         setData1(rowsData);
         setData3(shoveldata);
+        updateGanttChart()
+        setOpenLoader1(false)
         // updateGanttChart(rowsData, parsedData2, checkedItems);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -494,9 +513,10 @@ const SveltaWithDropDown = () => {
       FilteredTruckHistory,
       exadata1,
       exadata2,
-      SortedData
+      SortedData,
+      colorConfigdata
     );
-  }, [checkedItems, data1, data2, checkedJobItems, minTime, maxTime, mindate, maxdate, FilteredTruckHistory, exadata1, exadata2, SortedData]);
+  }, [checkedItems, data1, data2, checkedJobItems, minTime, maxTime, mindate, maxdate, FilteredTruckHistory, exadata1, exadata2, SortedData,colorConfigdata]);
   const updateGanttChart = (
     rowsData,
     parsedData2,
@@ -522,21 +542,24 @@ const SveltaWithDropDown = () => {
         uniqueData.length === checkedItems.size &&
         uniqueJobData.length === checkedJobItems.size
       ) {
+        setOpenLoader1(true)
         let allFilteredTasks = [];
         let filteredRowsdata = [];
         let filteredExaRowsdata = [];
         let allFilteredExaTasks = [];
 
         // Filtering Tasks to show in the charts --------
-        setOpenLoader1(true)
         uniqueData.forEach((uniquItem) => {
+          setOpenLoader1(true)
           const filteredData = parsedData2.filter(
             (item) => item.tipper_id == uniquItem
+          
           );
           // Sort filtered data by state_date
           const sortedData = filteredData.sort(
             (a, b) => new Date(a.state_date) - new Date(b.state_date)
           );
+        
           
           const tasksData = FilteredTruckHistory
             .map((data, index, arr) => {
@@ -608,6 +631,26 @@ const SveltaWithDropDown = () => {
                     taskClass = "";
                 }
 
+                // Find the color for the state
+                const stateColor = colorConfigdata.find(
+                  (config) => config.stateName == data.new_state
+                )?.colorCode || "#000000"; // Default color if no match found
+
+               // Generate a unique class name based on the stateColor
+              const dynamicClassName = `color-${data.new_state}-${stateColor.replace('#', '')}`;
+
+              // Inject the CSS class into the document if it doesn't already exist
+              if (!document.querySelector(`.${dynamicClassName}`)) {
+                const style = document.createElement('style');
+                style.innerHTML = `
+                  .${dynamicClassName} {
+                    background-color: ${stateColor};
+                  }
+                `;
+                document.head.appendChild(style);
+              }
+
+
                 const task = {
                   id: generateUniqueId(),
                   resourceId: data.tipper_id,
@@ -615,6 +658,7 @@ const SveltaWithDropDown = () => {
                   data: "tipper",
                   from: createDateTime(STdate, ST),
                   to: createDateTime(ETdate, ET),
+                  // classes: dynamicClassName,
                   classes: taskClass,
                   enableResize: false,
                   enableDragging: false,
@@ -687,7 +731,7 @@ const SveltaWithDropDown = () => {
                     default:
                       taskClass = "";
                   }
-  
+
                   const task = {
                     id: generateUniqueId(),
                     resourceId: data.excavator_id,
@@ -729,7 +773,7 @@ const SveltaWithDropDown = () => {
          const uniqueTipperIds = [...new Set(rowss)];
  
          console.log(uniqueTipperIds); 
- 
+        
         // Filtering rows to show in the charts --------
         const uniqueAgentIDs = new Set();
         const rowsDataa = FilteredTruckHistory
@@ -779,7 +823,7 @@ const SveltaWithDropDown = () => {
           mergedArray2 = filteredRowsdata.concat(filteredExaRowsdata);
           setMergeddata(mergedArray2)
         }
-      setOpenLoader1(false)
+        setOpenLoader1(false); // Stop loader after array operations
         const { rows, tasks, from, to, ...restOptions } = options;
         ganttRef.current = new SvelteGantt({
           target: document.getElementById("example-gantt"),

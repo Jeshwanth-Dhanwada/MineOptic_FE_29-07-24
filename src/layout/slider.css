@@ -92,3 +92,57 @@
     color: #034661;
     border: 1px solid #034661;
   }
+
+  /* #Marquee{} */
+  .marquee-container {
+    width: 0%;  /* Full width of the AppBar */
+    overflow: hidden; 
+    margin-right: 400px;
+    
+    /* white-space: nowrap;  Prevent text from wrapping */
+    /* box-sizing: border-box; */
+  }
+  
+  .marquee-content {
+    display: inline-block;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    /* padding-left: 20;  Start outside the visible area */
+    /* animation: marquee 10s linear infinite; */
+  }
+  
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+#appbar{border: 1px solid red;}  
+
+#Icons{
+  width:200px;
+  height:200px;
+  position:absolute;
+  top:50px;
+  left:20%;
+  border:1px solid red;
+  background-color: whitesmoke;
+  color: #000000;
+  
+}
+#FilterIcons{
+  width:200px;
+  height:auto;
+  position:absolute;
+  top:50px;
+  left:12%;
+  border:3px solid #EEEEEE;
+  background-color: white;
+  color: #000000;
+}
+#listoptions:hover{
+  background-color: #E6ECEF;
+}
+#listoptions{
+  cursor:pointer;
+  border:hidden
+}

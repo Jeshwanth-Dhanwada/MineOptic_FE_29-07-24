@@ -122,41 +122,8 @@ export default function RightTabPanel({ nodefromshowRoutes, setJobIdSidetoBottom
     setSize(item)
   }
   return (
-    expanded ? (
-      <div 
-    //   id="dasboard-right-container"
-    //   style={{ position: "fixed", top: "45px" }}
-    //   className={`dashboard-right-container sticky-top ${expanded ? "expanded" : "partial"
-    // }`}
-    >
-          <div className="pt-2" onClick={handleExpandToggle}>
-            <KeyboardDoubleArrowRightIcon
-              style={{  
-                        cursor: "pointer",
-                        backgroundColor: "#09587C", 
-                        color: '#ffffff',
-                        position: "fixed",
-                        right:size ? size :'30%',
-                        width:'25',height:'47px',
-                        top:'46px',
-                        display: 'inline'
-                      }}
-              onClick={handleExpandToggle}
-            />
-          </div>
-        <Card
-          id="dasboard-right-container"
-          style={{ position: "fixed", top: "45px" }}
-          className={`dashboard-right-container sticky-top ${expanded ? "expanded" : "partial"
-            }`}
-        >
-          {/* <KeyboardDoubleArrowRightIcon style={{cursor:'pointer'}} /> */}
-          <RightSlider 
-                isExpandedFull={isExpandedFull} 
-                setIsExpandedFull={setIsExpandedFull}
-                onclick={HandleIcon}
-                />
-          <Box sx={{ position: "relative" }}>
+   <div>
+      <Box sx={{ position: "relative" }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <Tabs
                 value={value}
@@ -165,8 +132,8 @@ export default function RightTabPanel({ nodefromshowRoutes, setJobIdSidetoBottom
                 style={{background:'#09587c'}}
               >
                 <Tab style={{ fontSize: '10.5px', fontWeight: 'bold',color:'#FFFFFF', backgroundColor: value === 0 ? "#fc9445" : "#09587c" }} label="Jobs" {...a11yProps(0)} />
-                {/* <Tab label="Inputs" {...a11yProps(1)} />
-              <Tab label="Outputs" {...a11yProps(2)} /> */}
+                <Tab label="Inputs" {...a11yProps(1)} />
+                <Tab label="Outputs" {...a11yProps(2)} />
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -183,23 +150,5 @@ export default function RightTabPanel({ nodefromshowRoutes, setJobIdSidetoBottom
             <div style={{ height: "350px", overflowY: "auto" }}></div>
           </CustomTabPanel> */}
           </Box>
-        </Card>
-      </div>
-    ) : (
-      <div
-        id="dasboard-right-container"
-        style={{ position: "fixed", top: "45px" }}
-        className={`dashboard-right-container sticky-top partial`}>
-        <div className="pt-2" onClick={handleExpandToggle}>
-        {/* <RightSlider isExpandedFull={isExpandedFull} setIsExpandedFull={setIsExpandedFull}/> */}
-          <KeyboardDoubleArrowLeftIcon
-            style={{ cursor: "pointer",backgroundColor: "#09587C", 
-            color: '#ffffff',width:'25',height:'47px',position: "fixed",
-            right:'0%' }}
-            onClick={handleExpandToggle}
-          />
-        </div>
-      </div>
-    )
-  );
-}
+   </div>
+)}

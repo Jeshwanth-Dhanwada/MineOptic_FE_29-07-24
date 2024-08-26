@@ -11,7 +11,7 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { IconButton, TextField } from '@mui/material';
 import { debounce } from 'lodash';
 
-export default function DateTimeRangeField({ dateRange, setDateRange, minDateTime, endTime, setEndTime, style }) {
+export default function DateTimeRangeField({ dateRange, setdatestartRange, minDateTime, endTime, setEndTime, style }) {
   // const [minDate, setMinTime] = useState(date)
   // const [maxTime, setMaxTime] = useState(parsedDateTime)
   // const [selectedDateTime, setSelectedDateTime] = useState(dateRange)
@@ -37,7 +37,8 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
   }
 
   const handleStartDateTimeChange = (date) => {
-    setDateRange(date.toISOString())
+    setdatestartRange(date.toISOString())
+    console.log("daterange:",date)
     // const parsedDate = dayjs(date);
     // setEndTime(dayjs(date))
   };
@@ -55,7 +56,9 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
 
   const minDate = dayjs('2021-06-24 16:31');
 
+  console.log("mindate:",minDate)
 
+  // console.log(dateRange,"dateRange")
   return (
     <div className="d-flex flex-row">
       <div className="date-time-wrapper" style={{ height: "10px !important", overflow: 'hidden' }}>
@@ -64,10 +67,10 @@ export default function DateTimeRangeField({ dateRange, setDateRange, minDateTim
             <div className="d-flex flex-row justify-content-between">
               <DateTimePicker
                 label="Start DateTime"
-                value={dateRange ? dayjs(dateRange) : ''}
+                value={dateRange ? dayjs(dateRange) : null}
                 inputFormat="YYYY/MM/DD HH:mm"
                 ampm={false} // Add AM/PM make true
-                minDate={minDate}
+                minDateTime={minDate}
                 // maxTime={dayjs(dateRange)}
                 viewRenderers={{
                   hours: renderTimeViewClock,

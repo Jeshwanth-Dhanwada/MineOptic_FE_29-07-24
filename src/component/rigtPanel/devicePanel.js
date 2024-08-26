@@ -1,29 +1,17 @@
 import "./rightpanel.css";
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
-import { getOADetails,getDeviceMaster } from "../../api/shovelDetails";
+import { getDeviceMaster } from "../../api/shovelDetails";
 import { Backdrop, CircularProgress } from "@mui/material";
+import AuthContext from "../../context/AuthProvider";
 
-const DevicePanel = ({ Oadetails }) => {
+const DevicePanel = () => {
+  const { auth } = useContext(AuthContext)
   const onDragStart = (event, job) => {
     event.dataTransfer.setData("application/reactflow", JSON.stringify(job));
     event.dataTransfer.effectAllowed = "move";
   };
 
-  const jsondevices = [
-    {
-      id:"1",
-      type: "IOT",
-      brand: "Device1",
-      model: "Modal S21",
-    },
-    {
-      id:"2",
-      type: "IOT",
-      brand: "Device2",
-      model: "Modal XPS 13",
-    }
-  ]
   const [devices, setDevices] = useState([])
   const [OpenLoader,setOpenLoader] = useState(false)
   useEffect(() => {
@@ -32,7 +20,8 @@ const DevicePanel = ({ Oadetails }) => {
   const showDevices = async (key) =>{
     setOpenLoader(true)
     const responsedata = await getDeviceMaster()
-    setDevices(responsedata, key)
+    const filteredData = responsedata.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+    setDevices(filteredData, key)
     setOpenLoader(false)
   }
   console.log(devices.map((item)=>item),"30004")

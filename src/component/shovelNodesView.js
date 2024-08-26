@@ -399,9 +399,9 @@ const ShovelNodesView = () => {
                   onEdgesChange={onEdgesChange}
                 >
                   <Background variant="lines" />
-                 {selectedNode && <Card id="dasboard-right-container" className='dashboard-right-container'>
+                 {/* {selectedNode && <Card id="dasboard-right-container" className='dashboard-right-container'>
                     <RightTabPanel employees={filteredEmps} />
-                  </Card>}
+                  </Card>} */}
                 </ReactFlow>
               </div>
             </ReactFlowProvider>

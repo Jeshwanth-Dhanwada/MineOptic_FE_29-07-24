@@ -64,10 +64,10 @@
   background-color: black;
 }
 .sg-task.IE-orange {
-  background-color: orange;
+  background-color: #ffa500;
 }
 .sg-task.SE-red {
-  background-color: red;
+  background-color: #ff0000;
 }
 .sg-task.SL-Dbrown {
   background-color: 	#5C4033;
@@ -76,19 +76,19 @@
   background-color: 	#006400;
 }
 .sg-task.LD-green {
-  background-color: green;
+  background-color: #008000;
 }
 .sg-task.SP-bluegreen {
   background-color: #0D98BA;
 }
 .sg-task.WT-blue {
-  background-color: blue;
+  background-color: #0000ff;
 }
 .sg-task.WL-blue {
   background-color: blue;
 }
 .sg-task.IL-browngreen {
-  background-color: yellow;
+  background-color: #ffff00;
 }
 
 /* Excavator State colors */

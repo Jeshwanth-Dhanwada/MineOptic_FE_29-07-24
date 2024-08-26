@@ -12,12 +12,12 @@ import AuthContext from "../../context/AuthProvider";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 function NodeState() {
+  const {auth} = useContext(AuthContext)
   const [data, setData] = useState([]);
   const [AttendanceData, setAttendance] = useState([]);
   const [Shiftdata, setShiftData] = useState([]);
   const [empId, setEmpId] = useState([]);
   const [empNode, setEmpNode] = useState([]);
-  const [defaultvalue, getEMPAllocation] = useState([]);
   // const [selectedEmployee, setSelectedEmployee] = useState(false);
 
   const [searchInput, setSearchInput] = useState("");
@@ -33,7 +33,8 @@ function NodeState() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setData(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setData(filteredData);
         setOpenLoader(false)
       })
       .catch((error) => {
@@ -49,7 +50,8 @@ function NodeState() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setEmpNode(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setEmpNode(filteredData);
         setOpenLoader(false)
       })
       .catch((error) => {
@@ -64,9 +66,8 @@ function NodeState() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setShiftData(response.data);
-        // const routedata.push(response.data)
-        // console.log(routedata,"passing to the variable")
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setShiftData(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -82,7 +83,8 @@ function NodeState() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setAttendance(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setAttendance(filteredData);
         setOpenLoader(false)
       })
       .catch((error) => {
@@ -96,7 +98,8 @@ function NodeState() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setAttendance(response.data);
+        const filteredData = response.data.filter((dbitem) => String(dbitem.branchId) === String(auth.branchId));
+        setAttendance(filteredData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -163,9 +166,6 @@ function NodeState() {
 
   const handleCheckboxChange = (empId) => {
     setEmpId(empId);
-    // Find the selected employee based on empId
-    // const selectedEmp = data.find((item) => item.empId === empId);
-    // Update the selected employee state
     setSelectedCheckboxes((prevSelectedCheckboxes) => {
       if (prevSelectedCheckboxes.includes(empId)) {
         return prevSelectedCheckboxes.filter((id) => id !== empId);
@@ -176,7 +176,6 @@ function NodeState() {
     // setSelectedEmployee(selectedEmp);
   };
 
-  const [showToast, setShowToast] = useState(false);
 
   let Attend = [];
   let X = 0;
